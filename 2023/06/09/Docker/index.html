@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-Docker" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/09/Docker/" class="article-date">
+  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>1.在安装docker之前，先初始化机器环境，如果之前安装过旧版本的docker，应该先使用命令进行卸载</p>
+<p>2.进行yum源配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line"></span><br><span class="line">wget -O/etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">wget -o/etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"></span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/1.png"></p>
+<p>3.安装docker，首先需要虚拟机联网，安装yum工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils \device-mapper-persistent-data \</span><br><span class="line">lvm2--skip-broken</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/2.png"></p>
+<p>4.配置网卡转发</p>
+<p>（1）写入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/sysctl.d/docker.conf</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4.conf.default.rp_filter = 0</span><br><span class="line">net.ipv4.conf.all.rp_filter = 0</span><br><span class="line">net.ipv4.ip_forward=1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<p>（2）重新加载内核参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">modprobe br_netfilter</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -p /etc/sysctl.d/docker.conf</span><br></pre></td></tr></table></figure>
+
+<p>5.利用yum进行docker安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl-o/etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line"></span><br><span class="line">cur-o/etc/yum.repos.d/Centos-7.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/3.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#更新yum缓存</span><br><span class="line">yum clean al1 &amp;&amp; yum makecache</span><br><span class="line"></span><br><span class="line">#可以直接yum安装docker了</span><br><span class="line">## 查看源中可用版本</span><br><span class="line">yum list docker-ce --showduplicates | sort -r</span><br><span class="line">## yum安装</span><br><span class="line">yum install docker-ce -y</span><br><span class="line">##查看docker版本，验证是否验证成功</span><br><span class="line">docker -v</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/4.png"></p>
+<p>6.配置镜像加速器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /etc/docker</span><br><span class="line">touch /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">	&quot;registry-mirrors&quot; : [</span><br><span class="line">	&quot;https://8xpk5wnt.mirror.aliyuncs.com&quot;</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>7.启动docker</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#启动docker前，一定要关闭防火墙！！</span><br><span class="line"># 关闭</span><br><span class="line">systemctl stop firewalld</span><br><span class="line"># 禁止开机启动防火墙</span><br><span class="line">systemctl disable firewalld</span><br><span class="line"></span><br><span class="line">## 查看docker信息</span><br><span class="line">docker info</span><br><span class="line">docker ps</span><br><span class="line">docker images</span><br><span class="line">docker version</span><br><span class="line"></span><br><span class="line">## docker-client</span><br><span class="line">which docker</span><br><span class="line">## docker daemon</span><br><span class="line">ps aux |grep docker</span><br><span class="line">## containerd</span><br><span class="line">ps aux|grep containerd</span><br><span class="line">systemctl status containerd </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/5.png"></p>
+<p>7.docker初体验</p>
+<p>（1）查看本地的docker镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image ls 或 docker images</span><br></pre></td></tr></table></figure>
+
+<p>（2）可选择删除旧版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi 镜像id</span><br></pre></td></tr></table></figure>
+
+<p>（3）搜索一下远程仓库中的镜像文件是否存在</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search nginx</span><br></pre></td></tr></table></figure>
+
+<p>（4）拉取，下载镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docerk pull nginx </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/6.png"></p>
+<p>（5）查看镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/7.png"></p>
+<p>（6）运行镜像，运行出具体内容，在容器中就跑着一个nginx服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run 参数 镜像的名字/id</span><br><span class="line">-d 后台运行容器</span><br><span class="line">-p 80:80 端口映射，宿主机端口：容器内端口，访问宿主机的80端口，也就访问到容器中的80端口</span><br><span class="line"></span><br><span class="line">docker run -d -p 80:80 nginx</span><br><span class="line">会返回一个容器的id</span><br></pre></td></tr></table></figure>
+
+<p>（7）查看容器是否在运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/8.png"></p>
+<p>（8）访问网站</p>
+<p><code>192.168.88.161:80</code></p>
+<p><img src="/../image_3/9.png"></p>
+<h3 id="获取镜像"><a href="#获取镜像" class="headerlink" title="获取镜像"></a>获取镜像</h3><p>获取镜像，镜像托管仓库，好比yum源一样. 默认的docker仓库是，dockerhub ，有大量的优质的镜像，以及用户自己上传的镜像 centos容器 vim nginx 。提交为镜像，上传到dockehub</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker search centos</span><br><span class="line"></span><br><span class="line">##我们在获取redis镜像的时候，发现下载了多行信息，最终仅得到了一个完整的镜像文件</span><br><span class="line">[root@node3 ~]# docker pull redis</span><br><span class="line">[root@node3 ~]# docker images</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/10.png"></p>
+<p><img src="/../image_3/11.png"></p>
+<h3 id="查看本地的镜像文件"><a href="#查看本地的镜像文件" class="headerlink" title="查看本地的镜像文件"></a>查看本地的镜像文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker images </span><br><span class="line"></span><br><span class="line">docker image ls</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/12.png"></p>
+<h3 id="下载docker镜像"><a href="#下载docker镜像" class="headerlink" title="下载docker镜像"></a>下载docker镜像</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull centos # 默认的是 centos:latest</span><br><span class="line"></span><br><span class="line">docker pull centos:7.8.2003</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/13.png"></p>
+<h3 id="查看docker镜像的存储路径"><a href="#查看docker镜像的存储路径" class="headerlink" title="查看docker镜像的存储路径"></a>查看docker镜像的存储路径</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker info |grep Root</span><br><span class="line"></span><br><span class="line">#Docker Root Dir: /var/lib/docker</span><br><span class="line">#具体位置</span><br><span class="line">ls /var/lib/docker/image/overlay2/imagedb/content/sha256</span><br><span class="line"></span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/14.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">记录 镜像 和容器的配置关系</span><br><span class="line"># 使用不同的镜像，生成容器# -it 开启一个交互式的终端--rm 容器退出时删除该容器</span><br><span class="line">#再运行一个7.8centos</span><br><span class="line">docker run -it --rm centos bash</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/15.png"></p>
+<h3 id="查看所有镜像、具体镜像"><a href="#查看所有镜像、具体镜像" class="headerlink" title="查看所有镜像、具体镜像"></a>查看所有镜像、具体镜像</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker images 镜像名</span><br></pre></td></tr></table></figure>
+
+<h3 id="指定tag查看"><a href="#指定tag查看" class="headerlink" title="指定tag查看"></a>指定tag查看</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images centos:7.8.2003</span><br></pre></td></tr></table></figure>
+
+<h3 id="列出镜像id"><a href="#列出镜像id" class="headerlink" title="列出镜像id"></a>列出镜像id</h3><p>-q –quiet 列出id</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images -q</span><br></pre></td></tr></table></figure>
+
+<h3 id="格式化显示镜像"><a href="#格式化显示镜像" class="headerlink" title="格式化显示镜像"></a>格式化显示镜像</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 这是docker的模板语言，--format</span><br><span class="line"></span><br><span class="line">docker images --format &quot;&#123;&#123;.ID&#125;&#125;--&#123;&#123;.Repository&#125;&#125;&quot;</span><br><span class="line"></span><br><span class="line">[root@node3 ~]# docker images --format &quot;&#123;&#123;.ID&#125;&#125;--&#123;&#123;.Repository&#125;&#125;&quot;</span><br><span class="line"></span><br><span class="line">605c77e624dd--nginx</span><br><span class="line">7614ae9453d1--redis</span><br><span class="line">5d9483f9a7b2—mysql</span><br></pre></td></tr></table></figure>
+
+<p>运行容器，且进入容器内，且在容器内执行某个命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# docker run -it centos:7.8.2003 sh</span><br><span class="line">sh-4.2#</span><br><span class="line">sh-4.2#</span><br><span class="line">sh-4.2# cat /etc/redhat-release</span><br><span class="line">Centos Linux release 7.8.2003 (Core)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/16.png"></p>
+<p>开启一个容器，让它帮你运行某个程序，属于前台运行，会卡住一个终端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# docker run centos:7.8.2003 ping baidu.com</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/17.png"></p>
+<p>运行一个活着的容器，docker ps可以看到的容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># -d 参数，让容器在后台跑着 (针对宿主机而言)</span><br><span class="line"></span><br><span class="line"># 返回容器id</span><br><span class="line">docker run -d centos:7.8.2003 ping baidu.com</span><br><span class="line"></span><br><span class="line">docker run -d --rm --name pythonav centos:7.8.2003 pingpythonav.cn</span><br><span class="line"></span><br><span class="line">docke rps</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/18.png"></p>
+<p><img src="/../image_3/19.png"></p>
+<p><img src="/../image_3/20.png"></p>
+<p>查看容器日志的玩法，刷新日志、查看最后五条</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># docker logs -f 容器id</span><br><span class="line"></span><br><span class="line">docker logs -f f2598cb26363</span><br><span class="line">docker logs f2598cb26363 | tail -5</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/21.png"></p>
+<p><img src="/../image_3/22.png"></p>
+<p>查看容器的详细信息，用于高级的调试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container inspect 容器id</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/23.png"></p>
+<p>容器的端口映射</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 后台运行nginx容器，且起个名字，且端口映射宿主机的80端口，访问到容器内的80端口</span><br><span class="line"></span><br><span class="line">docker run -d --name bigdata_nginx -p 85:80 nginx</span><br><span class="line"></span><br><span class="line"># 查看容器</span><br><span class="line">[root@yc_docker81 ~]# docker ps</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/24.png"></p>
+<p>查看容器的端口转发情况</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker port 容器id</span><br><span class="line"></span><br><span class="line"># docker port 2e73fac44507</span><br><span class="line"></span><br><span class="line">80/tcp -&gt; 0.0.0.0:85</span><br><span class="line">80/tcp -&gt; :::85</span><br></pre></td></tr></table></figure>
+
+<p>随机端口映射 -P 随机访问一个宿主机的空闲端口，映射到容器内打开的端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name bigdata_nginx_random -P nginx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/25.png"></p>
+<p><img src="/../image_3/26.png"></p>
+<p>创建并运行nginx容器的命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name containerName -p 80:80 -d nginx</span><br></pre></td></tr></table></figure>
+
+<p>进入容器，进入我们刚刚创建的nginx容器的命令为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 25866bdfa0e3 bash   //25866bdfa0e3是容器的id</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_3/27.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clio0ntmg0000u4ub7u6l11no" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  <a href="/2023/06/09/Spark(Yarn)/" class="article-nav-link">
+    <strong class="article-nav-caption">Newer</strong>
+    <div class="article-nav-title">
+      
+      (no title)
+      
+    </div>
+  </a>
+  
+  
+  <a href="/2023/06/09/Git/" class="article-nav-link">
+    <strong class="article-nav-caption">Older</strong>
+    <div class="article-nav-title"></div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2023</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul></p>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>
