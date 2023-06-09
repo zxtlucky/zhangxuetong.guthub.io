@@ -8,6 +8,7 @@
   
   
   <title>
+    docker流程配置 |
     
     Hexo
   </title>
@@ -36,6 +37,17 @@
 
   <div class="article-inner">
     
+    <header class="article-header">
+      
+  
+  <h1 class="article-title" itemprop="name">
+    docker流程配置
+  </h1>
+  
+  
+
+    </header>
+    
 
     
     <div class="article-meta">
@@ -56,8 +68,7 @@
       
       
       
-        <hr>
-<h2 id="title-docker流程配置"><a href="#title-docker流程配置" class="headerlink" title="title:docker流程配置"></a>title:docker流程配置</h2><h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>1.在安装docker之前，先初始化机器环境，如果之前安装过旧版本的docker，应该先使用命令进行卸载</p>
+        <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>1.在安装docker之前，先初始化机器环境，如果之前安装过旧版本的docker，应该先使用命令进行卸载</p>
 <p>2.进行yum源配置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line"></span><br><span class="line">wget -O/etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">wget -o/etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"></span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
 
@@ -191,7 +202,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clio49kmx000110ub49uj537l" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clio4jcr3000078ub1c0n6h0x" class="article-share-link">
         Share
       </a>
       
@@ -203,11 +214,11 @@
   
 <nav class="article-nav">
   
-  <a href="/2023/06/09/Git/" class="article-nav-link">
+  <a href="/2023/06/09/Spark(Yarn)/" class="article-nav-link">
     <strong class="article-nav-caption">Newer</strong>
     <div class="article-nav-title">
       
-      GIT流程配置
+      Spark(Yarn)环境配置
       
     </div>
   </a>
@@ -215,7 +226,7 @@
   
   <a href="/2023/06/09/Hive/" class="article-nav-link">
     <strong class="article-nav-caption">Older</strong>
-    <div class="article-nav-title"></div>
+    <div class="article-nav-title">Hive配置</div>
   </a>
   
 </nav>

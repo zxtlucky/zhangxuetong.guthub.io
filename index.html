@@ -69,6 +69,17 @@
 
   <div class="article-inner">
     
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Spark(Yarn)/">Spark(Yarn)环境配置</a>
+  </h2>
+  
+  
+
+    </header>
+    
 
     
     <div class="article-meta">
@@ -103,105 +114,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clio49kn1000610ub9qal25ck" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Git" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Git/">GIT流程配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Git/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="Git-的基本使用01-TortoiseGit-操作本地仓库"><a href="#Git-的基本使用01-TortoiseGit-操作本地仓库" class="headerlink" title="Git 的基本使用01-TortoiseGit 操作本地仓库"></a>Git 的基本使用01-TortoiseGit 操作本地仓库</h2><p>1.初始化仓库</p>
-<p>​        创建Git版本库创建完毕仓库,我们发现,此时我们创建的文件夹下有一个.git 文件已经生成了，并且仓库文件夹上多了一个 绿色图标。</p>
-<p>2.添加文件</p>
-<p>​        在仓库中新建一个文件，选中新建的文件–&gt;右键–&gt; TortoiseGit–&gt; 添加，此时我们看到文件夹上多了一个 “加号”。</p>
-<p>3.提交文件至本地文件</p>
-<p>选中文件，右键git提交<img src="/../image_2/1.png"></p>
-<p>4.修改文件，与再次提交文件</p>
-<p>​        当我们修改文件以后,文件上多了一个红色感叹号,表示我们上次提交后该文件被修改过提交后文件图标又变成绿色<img src="/../image_2/2.png"></p>
-<p>5.文件状态讲解</p>
-<p>6.修改文件，不提交和上一个版本比较差异</p>
-<p>修改文件,此时不要提交选中文件–&gt;右键–&gt; TortoiseGit–&gt; 比较差异</p>
-<p><img src="/../image_2/3.png"></p>
-<p>7.查看提交历史记录</p>
-<p>选中文件右键–&gt; TortoiseGit–&gt; 显示日志，此时我们可以看到所有的历史提交记录<img src="/../image_2/4.png"></p>
-<p>8.回退至历史版本</p>
-<p>右键–&gt; TortoiseGit–&gt; 显示日志，选中某个版本–&gt; 进行如下操作<img src="/../image_2/5.png"></p>
-<p>9.文件删除</p>
-<p>本地删除与恢复<img src="/../image_2/6.png"></p>
-<h2 id="Git-的基本使用02-TortoiseGit-操作本地仓库-分支"><a href="#Git-的基本使用02-TortoiseGit-操作本地仓库-分支" class="headerlink" title="Git 的基本使用02-TortoiseGit 操作本地仓库(分支)"></a>Git 的基本使用02-TortoiseGit 操作本地仓库(分支)</h2><p>1.创建分支</p>
-<p>到现在为止,我们一直使用的时主分支(master)在主分支上操作创建分支<img src="/../image_2/7.png"></p>
-<p>2.查看分支</p>
-<p>查看版本分支图,此时我们看到有两个分支<img src="/../image_2/8.png"></p>
-<p>3.切换分支</p>
-<p><img src="/../image_2/9.png"></p>
-<p>4.合并</p>
-<p>切换到 主版本，右键 合并即可将需求1 写的代码合并至主分支</p>
-<p><img src="/../image_2/10.png"></p>
-<p>5.删除分支</p>
-<p><img src="/../image_2/11.png"></p>
-<h2 id="tag标签"><a href="#tag标签" class="headerlink" title="tag标签"></a>tag标签</h2><p>1.标签的创建</p>
-<p><img src="/../image_2/12.png"></p>
-<p>2.标签的切换与删除</p>
-<p><img src="/../image_2/13.png"></p>
-<h2 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h2><p>1.创建远程仓库</p>
-<p><img src="/../image_2/14.png"></p>
-<p>  <img src="/../image_2/15.png"></p>
-<p>2.把本地代码推送到云端</p>
-<p><img src="/../image_2/16.png"></p>
-<p>3.从远程仓库克隆代码</p>
-<p><img src="/../image_2/17.png"></p>
-<p>4.连接成功</p>
-<p><img src="/../image_2/18.png"></p>
-<p>5.推送本地仓库内容至远程仓库</p>
-<p><img src="/../image_2/19.png"></p>
-<p>6.克隆远程仓库到本地</p>
-<p><img src="/../image_2/20.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Git/" data-id="clio49kmt000010ubf1h9bj2n" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clio4jcrb000578ub1saq5986" class="article-share-link">
         Share
       </a>
       
@@ -219,6 +132,17 @@
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Docker/">docker流程配置</a>
+  </h2>
+  
+  
+
+    </header>
     
 
     
@@ -238,8 +162,7 @@
         
       
       
-        <hr>
-<h2 id="title-docker流程配置"><a href="#title-docker流程配置" class="headerlink" title="title:docker流程配置"></a>title:docker流程配置</h2><h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>1.在安装docker之前，先初始化机器环境，如果之前安装过旧版本的docker，应该先使用命令进行卸载</p>
+        <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>1.在安装docker之前，先初始化机器环境，如果之前安装过旧版本的docker，应该先使用命令进行卸载</p>
 <p>2.进行yum源配置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="line"></span><br><span class="line">wget -O/etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">wget -o/etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"></span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
 
@@ -373,7 +296,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clio49kmx000110ub49uj537l" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clio4jcr3000078ub1c0n6h0x" class="article-share-link">
         Share
       </a>
       
@@ -391,6 +314,17 @@
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Hive/">Hive配置</a>
+  </h2>
+  
+  
+
+    </header>
     
 
     
@@ -525,7 +459,105 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Hive/" data-id="clio49kmz000210ubeln3glyt" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Hive/" data-id="clio4jcr8000178ub8i0p578r" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Git" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Git/">GIT流程配置</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/09/Git/" class="article-date">
+  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="Git-的基本使用01-TortoiseGit-操作本地仓库"><a href="#Git-的基本使用01-TortoiseGit-操作本地仓库" class="headerlink" title="Git 的基本使用01-TortoiseGit 操作本地仓库"></a>Git 的基本使用01-TortoiseGit 操作本地仓库</h2><p>1.初始化仓库</p>
+<p>​        创建Git版本库创建完毕仓库,我们发现,此时我们创建的文件夹下有一个.git 文件已经生成了，并且仓库文件夹上多了一个 绿色图标。</p>
+<p>2.添加文件</p>
+<p>​        在仓库中新建一个文件，选中新建的文件–&gt;右键–&gt; TortoiseGit–&gt; 添加，此时我们看到文件夹上多了一个 “加号”。</p>
+<p>3.提交文件至本地文件</p>
+<p>选中文件，右键git提交<img src="/../image_2/1.png"></p>
+<p>4.修改文件，与再次提交文件</p>
+<p>​        当我们修改文件以后,文件上多了一个红色感叹号,表示我们上次提交后该文件被修改过提交后文件图标又变成绿色<img src="/../image_2/2.png"></p>
+<p>5.文件状态讲解</p>
+<p>6.修改文件，不提交和上一个版本比较差异</p>
+<p>修改文件,此时不要提交选中文件–&gt;右键–&gt; TortoiseGit–&gt; 比较差异</p>
+<p><img src="/../image_2/3.png"></p>
+<p>7.查看提交历史记录</p>
+<p>选中文件右键–&gt; TortoiseGit–&gt; 显示日志，此时我们可以看到所有的历史提交记录<img src="/../image_2/4.png"></p>
+<p>8.回退至历史版本</p>
+<p>右键–&gt; TortoiseGit–&gt; 显示日志，选中某个版本–&gt; 进行如下操作<img src="/../image_2/5.png"></p>
+<p>9.文件删除</p>
+<p>本地删除与恢复<img src="/../image_2/6.png"></p>
+<h2 id="Git-的基本使用02-TortoiseGit-操作本地仓库-分支"><a href="#Git-的基本使用02-TortoiseGit-操作本地仓库-分支" class="headerlink" title="Git 的基本使用02-TortoiseGit 操作本地仓库(分支)"></a>Git 的基本使用02-TortoiseGit 操作本地仓库(分支)</h2><p>1.创建分支</p>
+<p>到现在为止,我们一直使用的时主分支(master)在主分支上操作创建分支<img src="/../image_2/7.png"></p>
+<p>2.查看分支</p>
+<p>查看版本分支图,此时我们看到有两个分支<img src="/../image_2/8.png"></p>
+<p>3.切换分支</p>
+<p><img src="/../image_2/9.png"></p>
+<p>4.合并</p>
+<p>切换到 主版本，右键 合并即可将需求1 写的代码合并至主分支</p>
+<p><img src="/../image_2/10.png"></p>
+<p>5.删除分支</p>
+<p><img src="/../image_2/11.png"></p>
+<h2 id="tag标签"><a href="#tag标签" class="headerlink" title="tag标签"></a>tag标签</h2><p>1.标签的创建</p>
+<p><img src="/../image_2/12.png"></p>
+<p>2.标签的切换与删除</p>
+<p><img src="/../image_2/13.png"></p>
+<h2 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h2><p>1.创建远程仓库</p>
+<p><img src="/../image_2/14.png"></p>
+<p>  <img src="/../image_2/15.png"></p>
+<p>2.把本地代码推送到云端</p>
+<p><img src="/../image_2/16.png"></p>
+<p>3.从远程仓库克隆代码</p>
+<p><img src="/../image_2/17.png"></p>
+<p>4.连接成功</p>
+<p><img src="/../image_2/18.png"></p>
+<p>5.推送本地仓库内容至远程仓库</p>
+<p><img src="/../image_2/19.png"></p>
+<p>6.克隆远程仓库到本地</p>
+<p><img src="/../image_2/20.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/09/Git/" data-id="clio4jcr9000278ub6uwhghpp" class="article-share-link">
         Share
       </a>
       
@@ -543,6 +575,17 @@
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/">Spark(pyspark基础编码环境)配置</a>
+  </h2>
+  
+  
+
+    </header>
     
 
     
@@ -639,7 +682,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/" data-id="clio49kmz000310uba9mafeuo" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/" data-id="clio4jcra000378ub6p6hhn83" class="article-share-link">
         Share
       </a>
       
@@ -657,6 +700,17 @@
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Spark(HA)/">Spark(HA)环境配置</a>
+  </h2>
+  
+  
+
+    </header>
     
 
     
@@ -697,7 +751,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(HA)/" data-id="clio49kn0000410ub7uj36icy" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(HA)/" data-id="clio4jcrb000478ubed99acnw" class="article-share-link">
         Share
       </a>
       
@@ -715,6 +769,17 @@
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Spark(local)/">Spark(local)环境配置</a>
+  </h2>
+  
+  
+
+    </header>
     
 
     
@@ -769,7 +834,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(local)/" data-id="clio49kn0000510ub2ehn4z85" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(local)/" data-id="clio4jcrc000678ubdji8gvmr" class="article-share-link">
         Share
       </a>
       
@@ -787,6 +852,17 @@
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Spark(stand-alone)/">Spark(stand-alone)环境配置</a>
+  </h2>
+  
+  
+
+    </header>
     
 
     
@@ -864,7 +940,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(stand-alone)/" data-id="clio49kn1000710ube7lx41gq" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(stand-alone)/" data-id="clio4jcrc000778ub3tyaabfd" class="article-share-link">
         Share
       </a>
       
