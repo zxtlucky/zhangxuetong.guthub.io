@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    Flume(1) |
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-Flume(1)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h1 class="article-title" itemprop="name">
+    Flume(1)
+  </h1>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(1)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <h1 id="Flume（1）"><a href="#Flume（1）" class="headerlink" title="Flume（1）"></a>Flume（1）</h1><p>将<code>apache-flume-1.9.0-bin.tar.gz</code>压缩包下载到虚拟机中，并解压和添加软链接</p>
+<p><img src="/../image_1-2/1.png"></p>
+<p>配置环境变量</p>
+<p><img src="/../image_1-2/2.png"></p>
+<p>添加配置文件，启动agent并使用Netcat进行测试</p>
+<p><img src="/../image_1-2/3.png"></p>
+<p><img src="/../image_1-2/4.png"></p>
+<p><img src="/../image_1-2/5.png"></p>
+<h2 id="exec-source测试"><a href="#exec-source测试" class="headerlink" title="exec_source测试"></a>exec_source测试</h2><p>准备一个日志文件并写一个脚本模拟往日志文件中持续写入数据</p>
+<p><img src="/../image_1-2/6.png"></p>
+<p>创建一个flume自定义配置文件</p>
+<p><img src="/../image_1-2/7.png"></p>
+<p>启动flume采集</p>
+<p><img src="/../image_1-2/8.png"></p>
+<h2 id="spooldir-source测试"><a href="#spooldir-source测试" class="headerlink" title="spooldir_source测试"></a>spooldir_source测试</h2><p>采集spooldir目录下未被采集的数据 </p>
+<p><img src="/../image_1-2/9.png"></p>
+<p><img src="/../image_1-2/10.png"></p>
+<p><img src="/../image_1-2/11.png"></p>
+<h2 id="taildir-source测试"><a href="#taildir-source测试" class="headerlink" title="taildir_source测试"></a>taildir_source测试</h2><p>监视指定目录下的一批文件，并将某个文件中新写入的行记录到一个指定的目录中保存 <img src="/../image_1/12.png"></p>
+<p><img src="/../image_1-2/13.png"></p>
+<p>​                                                    <img src="/../image_1-2/14.png"></p>
+<h2 id="avro-source"><a href="#avro-source" class="headerlink" title="avro source"></a>avro source</h2><p><img src="/../image_1-2/15.png">  <img src="/../image_1-2/16.png"></p>
+<p><img src="/../image_1-2/17.png"></p>
+<p><img src="/../image_1-2/18.png"></p>
+<h2 id="使用File-Channel实现数据持久化"><a href="#使用File-Channel实现数据持久化" class="headerlink" title="使用File Channel实现数据持久化"></a>使用File Channel实现数据持久化</h2><p><img src="/../image_1-2/19.png"></p>
+<p><img src="/../image_1-2/20.png"></p>
+<p><img src="/../image_1-2/21.png"></p>
+<p><img src="/../image_1-2/22.png"></p>
+<h2 id="利用avro-source和avro-sink实现agent级联"><a href="#利用avro-source和avro-sink实现agent级联" class="headerlink" title="利用avro source和avro sink实现agent级联"></a>利用avro source和avro sink实现agent级联</h2><p>启动hdfs，将上游配置文件，保存到node1,node2上，将下游配置文件，保存到node3上</p>
+<p><img src="/../image_1-2/23.png"></p>
+<p><img src="/../image_1-2/24.png"> </p>
+<p><img src="/../image_1-2/25.png"></p>
+<p>启动下游node3上的flume agent</p>
+<p><img src="/../image_1-2/26.png"></p>
+<p>在上游服务器上准备两个日志目录来生成模拟日志数据和利用shell脚本生成日志数据 </p>
+<p><img src="/../image_1-2/27.png"></p>
+<p><img src="/../image_1-2/28.png"></p>
+<p>启动node1和node2上的flume agent   <img src="/../image_1/29.png"></p>
+<p><img src="/../image_1-2/30.png"></p>
+<p>查看hdfs上是否生成数据</p>
+<p><img src="/../image_1-2/31.png"></p>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>拦截器相关测试    </p>
+<p><img src="/../image_1-2/32.png"></p>
+<p><img src="/../image_1-2/33.png"></p>
+<p>自定义拦截器</p>
+<p>启动hdfs，将上游配置文件，保存到node1,node2上,并将自定义的拦截器jar包保存到node1和node2flume的lib中，将下游配置文件，保存到node3上</p>
+<p><img src="/../image_1-2/34.png"></p>
+<p><img src="/../image_1-2/35.png"></p>
+<p><img src="/../image_1-2/36.png"></p>
+<p>启动下游的flume agent</p>
+<p><img src="/../image_1-2/37.png"></p>
+<p>在node1和node2上上传两个app日志目录来生成模拟日志数据 <img src="/../image_1/38.png"></p>
+<p><img src="/../image_1-2/39.png"></p>
+<p>启动node1和node2上的flume agent </p>
+<p><img src="/../image_1-2/40.png"></p>
+<p><img src="/../image_1-2/41.png"></p>
+<p>去hdfs上查看是否采集到数据</p>
+<p><img src="/../image_1-2/42.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(1)/" data-id="clj264d840002boub5qhsdhc1" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  <a href="/2023/06/19/Flume(2)/" class="article-nav-link">
+    <strong class="article-nav-caption">Newer</strong>
+    <div class="article-nav-title">
+      
+      Flume(2)
+      
+    </div>
+  </a>
+  
+  
+  <a href="/2023/06/09/Spark(Yarn)/" class="article-nav-link">
+    <strong class="article-nav-caption">Older</strong>
+    <div class="article-nav-title">Spark(Yarn)环境配置</div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2023</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul></p>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>

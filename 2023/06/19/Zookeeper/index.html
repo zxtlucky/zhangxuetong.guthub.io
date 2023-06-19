@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    Zookeeper |
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-Zookeeper" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h1 class="article-title" itemprop="name">
+    Zookeeper
+  </h1>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Zookeeper/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.300Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <h1 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h1><h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><p>cd到<code>/export/server</code>目录下，把zookeeper-3.4.6.tar.gz放到此目录下，并且进行解压</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf zookeeper-3.4.6.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/1.png"></p>
+<p>设置软连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s zookeeper-3.4.6.tar/zookeeper</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/2.png"></p>
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>到profile中，添加两串代码，并且三台服务器中都要配置，并且配置好后三台虚拟机都要执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/3.png"></p>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>执行<code>cd /export/server/zookeeper/conf/</code>目录下，并且执行<code>cp zoo_sample.cfg zoo.cfg</code>命令，在执行<code>mkdir -p /export/data/zookeeper/zkdatas/</code>命令，创建zkdatas文件，在zoo.cfg中修改一些内容，如图：</p>
+<p><img src="/../image_6-2/4.png"></p>
+<p>添加myid配置</p>
+<p>在node1的zkdatas下创建myid，内容为1，代码 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; /export/data/zkdatas/myid</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/5.png"></p>
+<h2 id="分发zookeeper并且配置myid的值"><a href="#分发zookeeper并且配置myid的值" class="headerlink" title="分发zookeeper并且配置myid的值"></a>分发zookeeper并且配置myid的值</h2><p>在node1上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r /export/server/zookeeper-3.4.6/ root@node2:/export/server/</span><br></pre></td></tr></table></figure>
+
+<p>并且设置软连接，如图:</p>
+<p><img src="/../image_6-2/6.png"></p>
+<p>在node1上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r /export/server/zookeeper-3.4.6/ root@node3:/export/server/</span><br></pre></td></tr></table></figure>
+
+<p>并且设置软连接，如图:</p>
+<p><img src="/../image_6-2/7.png"></p>
+<p>在node2上修改myid的值位2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 2 &gt; /export/data/zookeeper/zkdatas/myid</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/8.png"></p>
+<p>在node3上修改myid的值位3</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 3&gt; /export/data/zookeeper/zkdatas/myid</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p> <img src="/../image_6-2/9.png"></p>
+<h2 id="启动zookeeper服务"><a href="#启动zookeeper服务" class="headerlink" title="启动zookeeper服务"></a>启动zookeeper服务</h2><p>在三台机器上执行<code>/export/server/zookeeper/bin/zkServer.sh start</code>，如图：</p>
+<p>node1：</p>
+<p><img src="/../image_6-2/10.png"></p>
+<p>node2：</p>
+<p><img src="/../image_6-2/11.png"></p>
+<p>node3：</p>
+<p><img src="/../image_6-2/12.png"></p>
+<h2 id="创建脚本"><a href="#创建脚本" class="headerlink" title="创建脚本"></a>创建脚本</h2><p>创建<code>/export/server/start/zk_start</code>目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /export/shell</span><br></pre></td></tr></table></figure>
+
+<p>编辑创建zk.sh 执行vim zkall.sh，如图：</p>
+<p><img src="/../image_6-2/13.png"></p>
+<p>配置环境变量，让环境变量生效，如图：</p>
+<p><img src="/../image_6-2/14.png"></p>
+<p>启动测试，输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zkall.sh start</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/15.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Zookeeper/" data-id="clj264d8a000eboub71uhdkfb" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  
+  <a href="/2023/06/19/Sqoop(1)/" class="article-nav-link">
+    <strong class="article-nav-caption">Older</strong>
+    <div class="article-nav-title">Sqoop(1)</div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2023</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul></p>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>

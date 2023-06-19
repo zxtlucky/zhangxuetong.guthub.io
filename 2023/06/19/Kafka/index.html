@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    Kafka |
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-Kafka" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h1 class="article-title" itemprop="name">
+    Kafka
+  </h1>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Kafka/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.298Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <h1 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h1><h2 id="Kafka简介"><a href="#Kafka简介" class="headerlink" title="Kafka简介"></a>Kafka简介</h2><h3 id="什么是Kafka"><a href="#什么是Kafka" class="headerlink" title="什么是Kafka"></a>什么是Kafka</h3><p>Kafka是一个分布式流处理系统，流处理系统使它可以像消息队列一样publish或者subscribe消息，分布式提供了容错性，并发处理消息的机制。</p>
+<h3 id="Kafka的基本概念"><a href="#Kafka的基本概念" class="headerlink" title="Kafka的基本概念"></a>Kafka的基本概念</h3><p>kafka运行在集群上，集群包含一个或多个服务器。kafka把消息存在topic中，每一条消息包含键值（key），值（value）和时间戳（timestamp）。</p>
+<p>kafka有以下一些基本概念：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Producer- 消息生产者，就是向kafka broker发消息的客户端。</span><br><span class="line">Consumer- 消息消费者，是消息的使用方，负责消费Kafka服务器上的消息。</span><br><span class="line">Topic- 主题，由用户定义并配置在Kafka服务器，用于建立Producer和Consumer之间的订阅关系。生产者发送消息到指定的Topic下，消息者从这个Topic下消费消息。</span><br><span class="line">Partition- 消息分区，一个topic可以分为多个 partition，每个partition是一个有序的队列。partition中的每条消息都会被分配一个有序的id（offset）。</span><br><span class="line">Broker- 一台kafka服务器就是一个broker。一个集群由多个broker组成。一个broker可以容纳多个topic。</span><br><span class="line">Consumer Group - 消费者分组，用于归组同类消费者。每个consumer属于一个特定的consumer group，多个消费者可以共同消息一个Topic下的消息，每个消费者消费其中的部分消息，这些消费者就组成了一个分组，拥有同一个分组名称，通常也被称为消费者集群。</span><br><span class="line">Offset- 消息在partition中的偏移量。每一条消息在partition都有唯一的偏移量，消息者可以指定偏移量来指定要消费的消息。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Kafka集群搭建"><a href="#Kafka集群搭建" class="headerlink" title="Kafka集群搭建"></a>Kafka集群搭建</h2><h3 id="Kafka基础环境要求"><a href="#Kafka基础环境要求" class="headerlink" title="Kafka基础环境要求"></a>Kafka基础环境要求</h3><p>Kafka集群中每一台服务器都需要有ZooKeeper</p>
+<h3 id="安装Kafka集群"><a href="#安装Kafka集群" class="headerlink" title="安装Kafka集群"></a>安装Kafka集群</h3><p>这里以kafka 2.12-2.41版本为例开始搭建。</p>
+<p>可以注意到Kafka的版本号为：kafka_2.12-2.4.1，因为kafka主要是使用scala语言开发的，2.12为scala的版本号。<a target="_blank" rel="noopener" href="http://kafka.apache.org/downloads%E5%8F%AF%E4%BB%A5%E6%9F%A5%E7%9C%8B%E5%88%B0%E6%AF%8F%E4%B8%AA%E7%89%88%E6%9C%AC%E7%9A%84%E5%8F%91%E5%B8%83%E6%97%B6%E9%97%B4%E3%80%82">http://kafka.apache.org/downloads可以查看到每个版本的发布时间。</a></p>
+<h4 id="上传安装包"><a href="#上传安装包" class="headerlink" title="上传安装包"></a>上传安装包</h4><p>(注：不想去官网下载到本地的也可以使用<code>wget https://mirrors.bfsu.edu.cn/apache/kafka/</code>版本号，进行下载)</p>
+<p><img src="/../image_7-2/1.png"></p>
+<p>说明：kafka名中的2.12是Scala语言版本，后面的2.4.1是kafka版本，端口默认为9092</p>
+<h4 id="移动文件夹到指定目录"><a href="#移动文件夹到指定目录" class="headerlink" title="移动文件夹到指定目录"></a>移动文件夹到指定目录</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv kafka_2.12-2.4.1.tgz /export/server</span><br><span class="line"></span><br><span class="line">tar -zxvf kafka_2.12-2.4.1.tgz</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h4><p>(1) 进入配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/kafka_2.11-2.0.0/config</span><br></pre></td></tr></table></figure>
+
+<p>(2) 编辑配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi server.properties</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/2.png"></p>
+<p><img src="/../image_7-2/3.png"> </p>
+<h4 id="分发Kafka到node2，node3"><a href="#分发Kafka到node2，node3" class="headerlink" title="分发Kafka到node2，node3"></a>分发Kafka到node2，node3</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/</span><br><span class="line"></span><br><span class="line">scp -r /export/server/kafka_2.12-2.4.1/ root@node2:/export/server/</span><br><span class="line">scp -r /export/server/kafka_2.12-2.4.1/ root@node3:/export/server/</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile </span><br><span class="line"></span><br><span class="line">export KAFKA_HOME=/export/server/kafka </span><br><span class="line">export PATH=$PATH:$KAFKA_HOME/bin </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/4.png"> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/5.png"> </p>
+<p>#注意:还需要分发环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scp -r /etc/profile root@node2:/etc/profile</span><br><span class="line"></span><br><span class="line">scp -r /etc/profile root@node3:/etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/6.png"> </p>
+<p>#分别在node2和node3上修改配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /export/server/kafka/config/server.properties</span><br><span class="line"></span><br><span class="line">broker.id=1 </span><br><span class="line">broker.id=2</span><br></pre></td></tr></table></figure>
+
+<p>#(broker.id 不能重复)</p>
+<p><img src="/../image_7-2/7.png"> </p>
+<p><img src="/../image_7-2/8.png"> </p>
+<h4 id="启停集群-在各个节点上启动"><a href="#启停集群-在各个节点上启动" class="headerlink" title="启停集群(在各个节点上启动)"></a>启停集群(在各个节点上启动)</h4><p>#启动集群</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-server-start.sh -daemon /export/server/kafka/config/server.properties </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/9.png"></p>
+<p>#停止集群</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-server-stop.sh stop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/10.png"></p>
+<h4 id="Kafka一键启停脚本"><a href="#Kafka一键启停脚本" class="headerlink" title="Kafka一键启停脚本"></a>Kafka一键启停脚本</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#kafka一键启停脚本</span><br><span class="line">#!/bin/bash</span><br><span class="line">if [ $# -eq 0 ]</span><br><span class="line">then</span><br><span class="line">echo &quot;please input param:start stop&quot;</span><br><span class="line">else</span><br><span class="line"></span><br><span class="line">if [ $1 = start  ]</span><br><span class="line">then</span><br><span class="line">for i in &#123;1..3&#125;</span><br><span class="line">do</span><br><span class="line">echo &quot;$&#123;1&#125;ing node$&#123;i&#125;&quot;</span><br><span class="line">ssh node$&#123;i&#125; &quot;source /etc/profile;/export/server/kafka/bin/kafka-server-start.sh -daemon /export/server/kafka/config/server.properties&quot;</span><br><span class="line">done</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $1 = stop ]</span><br><span class="line">then</span><br><span class="line">for i in &#123;1..3&#125;</span><br><span class="line">do</span><br><span class="line">ssh node$&#123;i&#125; &quot;source /etc/profile;/export/server/kafka/bin/kafka-server-stop.sh&quot;</span><br><span class="line">done</span><br><span class="line">fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/11.png"></p>
+<p>(1)启动</p>
+<p><img src="/../image_7-2/12.png"></p>
+<p>(2)关闭</p>
+<p><img src="/../image_7-2/13.png"></p>
+<h3 id="Kafka常用操作"><a href="#Kafka常用操作" class="headerlink" title="Kafka常用操作"></a>Kafka常用操作</h3><h4 id="创建topic"><a href="#创建topic" class="headerlink" title="创建topic"></a>创建topic</h4><p>创建一个topic（主题）。Kafka中所有的消息都是保存在主题中，要生产消息到Kafka，首先必须要有一个确定的主题。</p>
+<p>(1)基本方式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --create --topic tpc_1 --partitions 2 --replication-factor 2 --zookeeper node1:2181</span><br><span class="line"></span><br><span class="line">--replication-factor 副本数量</span><br><span class="line">--partitions 分区数量</span><br><span class="line">--topic topic 名称</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/14.png"></p>
+<p>(2)手动指定副本的存储位置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --topic tpc_1 --zookeeper node1:2181 --replica-assignment 0:1,1:2</span><br></pre></td></tr></table></figure>
+
+<p>(3)bootstrap方式</p>
+<p>创建名为test的主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --bootstrap-server node1:9092 --topic test</span><br></pre></td></tr></table></figure>
+
+<p>查看目前Kafka中的主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --list --bootstrap-server node1:9092</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/15.png"></p>
+<h4 id="删除topic"><a href="#删除topic" class="headerlink" title="删除topic"></a>删除topic</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh  --delete --topic tpc_1 --zookeeper node1:2181</span><br></pre></td></tr></table></figure>
+
+<p>(异步线程去删除)删除 topic,需要一个参数处于启用状态: delete.topic.enable &#x3D; true,否则删不掉</p>
+<p><img src="/../image_7-2/16.png"></p>
+<h4 id="查看topic"><a href="#查看topic" class="headerlink" title="查看topic"></a>查看topic</h4><p>(1)列出当前系统中的所有 topic </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --zookeeper node1:2181,node2:2181,node3:2181 –list</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/17.png"></p>
+<p>(2)查看 topic 详细信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --topic tpc_1  --zookeeper node1:2181 --replica-assignment 0:1,1:2</span><br><span class="line"></span><br><span class="line">bin/kafka-topics.sh --describe --topic tpc_1 --zookeeper node1:2181</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/18.png"></p>
+<h4 id="增加分区"><a href="#增加分区" class="headerlink" title="增加分区"></a>增加分区</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --alter --topic tpc_1 --partitions 3 --zookeeper node1:2181</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/19.png"></p>
+<p>Kafka 只支持增加分区,不支持减少分区</p>
+<p>原因是:减少分区,代价太大(数据的转移,日志段拼接合并)</p>
+<h4 id="动态配置topic参数"><a href="#动态配置topic参数" class="headerlink" title="动态配置topic参数"></a>动态配置topic参数</h4><p>(1) 添加、修改配置参数(开启压缩发送传输种提高kafka消息吞吐量的有效办法(‘gzip’, ‘snappy’, ‘lz4’, ‘zstd’)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-configs.sh --zookeeper node1:2181 --entity-type topics --entity-name tpc_1 --alter --add-config compression.type=gzip</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/20.png"> </p>
+<p>(3)删除配置参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-configs.sh --zookeeper node1:2181 --entity-type topics --entity-name tpc_1 --alter --delete-config compression.type</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/21.png"> </p>
+<h4 id="生产信息到Kafka并进行消费"><a href="#生产信息到Kafka并进行消费" class="headerlink" title="生产信息到Kafka并进行消费"></a>生产信息到Kafka并进行消费</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-producer.sh --broker-list node1:9092, node2:9092, node3:909</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/22.png"></p>
+<p>(1)消费消息(从头开始)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092, node2:9092, node1:9092 --topic tpc_1 --from-beginning</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/23.png"></p>
+<p>(2)指定要消费的分区,和要消费的起始 offset </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092,node2:9092,node3:9092 --topic tcp_1 --offset 2 --partition 0</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Kafka/" data-id="clj264d860006boub6vo9d65m" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  <a href="/2023/06/19/Flume(3)/" class="article-nav-link">
+    <strong class="article-nav-caption">Newer</strong>
+    <div class="article-nav-title">
+      
+      Flume(3)
+      
+    </div>
+  </a>
+  
+  
+  <a href="/2023/06/19/Flume(2)/" class="article-nav-link">
+    <strong class="article-nav-caption">Older</strong>
+    <div class="article-nav-title">Flume(2)</div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2023</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul></p>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>

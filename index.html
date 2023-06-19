@@ -64,6 +64,973 @@
     <h1 class="page-type-title"></h1>
     
     
+    <article id="post-Zookeeper" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Zookeeper/">Zookeeper</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Zookeeper/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.300Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h1><h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><p>cd到<code>/export/server</code>目录下，把zookeeper-3.4.6.tar.gz放到此目录下，并且进行解压</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf zookeeper-3.4.6.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/1.png"></p>
+<p>设置软连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s zookeeper-3.4.6.tar/zookeeper</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/2.png"></p>
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>到profile中，添加两串代码，并且三台服务器中都要配置，并且配置好后三台虚拟机都要执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/3.png"></p>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>执行<code>cd /export/server/zookeeper/conf/</code>目录下，并且执行<code>cp zoo_sample.cfg zoo.cfg</code>命令，在执行<code>mkdir -p /export/data/zookeeper/zkdatas/</code>命令，创建zkdatas文件，在zoo.cfg中修改一些内容，如图：</p>
+<p><img src="/../image_6-2/4.png"></p>
+<p>添加myid配置</p>
+<p>在node1的zkdatas下创建myid，内容为1，代码 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; /export/data/zkdatas/myid</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/5.png"></p>
+<h2 id="分发zookeeper并且配置myid的值"><a href="#分发zookeeper并且配置myid的值" class="headerlink" title="分发zookeeper并且配置myid的值"></a>分发zookeeper并且配置myid的值</h2><p>在node1上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r /export/server/zookeeper-3.4.6/ root@node2:/export/server/</span><br></pre></td></tr></table></figure>
+
+<p>并且设置软连接，如图:</p>
+<p><img src="/../image_6-2/6.png"></p>
+<p>在node1上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r /export/server/zookeeper-3.4.6/ root@node3:/export/server/</span><br></pre></td></tr></table></figure>
+
+<p>并且设置软连接，如图:</p>
+<p><img src="/../image_6-2/7.png"></p>
+<p>在node2上修改myid的值位2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 2 &gt; /export/data/zookeeper/zkdatas/myid</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/8.png"></p>
+<p>在node3上修改myid的值位3</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 3&gt; /export/data/zookeeper/zkdatas/myid</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p> <img src="/../image_6-2/9.png"></p>
+<h2 id="启动zookeeper服务"><a href="#启动zookeeper服务" class="headerlink" title="启动zookeeper服务"></a>启动zookeeper服务</h2><p>在三台机器上执行<code>/export/server/zookeeper/bin/zkServer.sh start</code>，如图：</p>
+<p>node1：</p>
+<p><img src="/../image_6-2/10.png"></p>
+<p>node2：</p>
+<p><img src="/../image_6-2/11.png"></p>
+<p>node3：</p>
+<p><img src="/../image_6-2/12.png"></p>
+<h2 id="创建脚本"><a href="#创建脚本" class="headerlink" title="创建脚本"></a>创建脚本</h2><p>创建<code>/export/server/start/zk_start</code>目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /export/shell</span><br></pre></td></tr></table></figure>
+
+<p>编辑创建zk.sh 执行vim zkall.sh，如图：</p>
+<p><img src="/../image_6-2/13.png"></p>
+<p>配置环境变量，让环境变量生效，如图：</p>
+<p><img src="/../image_6-2/14.png"></p>
+<p>启动测试，输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zkall.sh start</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="/../image_6-2/15.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Zookeeper/" data-id="clj264d8a000eboub71uhdkfb" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Sqoop(1)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Sqoop(1)/">Sqoop(1)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Sqoop(1)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.299Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Sqoop（1）"><a href="#Sqoop（1）" class="headerlink" title="Sqoop（1）"></a>Sqoop（1）</h1><h2 id="Sqoop介绍"><a href="#Sqoop介绍" class="headerlink" title="Sqoop介绍"></a>Sqoop介绍</h2><p>Apache Sqoop是在Hadoop生态体系和RDBMS体系&#96;之间传送数据的一种工具。</p>
+<p>Sqoop工作机制是将导入或导出命令翻译成mapreduce程序来实现。在翻译出的mapreduce中主要是对inputformat和outputformat进行定制。</p>
+<p>站在Apache立场看待数据流转问题，可以分为数据的导入导出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- Import：数据导入。RDBMS---&gt;Hadoop</span><br><span class="line"></span><br><span class="line">- Export：数据导出。Hadoop---&gt;RDBMS</span><br></pre></td></tr></table></figure>
+
+<h2 id="Sqoop安装"><a href="#Sqoop安装" class="headerlink" title="Sqoop安装"></a>Sqoop安装</h2><p>（备注：安装sqoop的前提是已经具备java、mysql、hadoop和hive环境）</p>
+<p><code>cd /export/server</code></p>
+<p>上传压缩包<code>sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz</code></p>
+<p>（1） rz -&gt; 选中<code>sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</code>-&gt; 确定</p>
+<p>（2） 直接拖拽到<code>/export/server</code>路径下</p>
+<p>解压<code>sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>设置软链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar /export/server/sqoop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_4-2/1.png"></p>
+<p>配置环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line">#SQOOP_HOME</span><br><span class="line">export SQOOP_HOME=/export/server/sqoop</span><br><span class="line">export PATH=$PATH:$SQOOP_HOME/bin</span><br></pre></td></tr></table></figure>
+
+<p>重新加载环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>配置文件修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/sqoop/conf</span><br><span class="line"></span><br><span class="line">mv sqoop-env-template.sh sqoop-env.sh</span><br></pre></td></tr></table></figure>
+
+<p>修改sqoop-env.sh</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi sqoop-env.sh</span><br><span class="line"></span><br><span class="line">export HADOOP_COMMON_HOME= /export/server/hadoop</span><br><span class="line">export HADOOP_MAPRED_HOME= /export/server/hadoop</span><br><span class="line">export HIVE_HOME= /export/server/hive</span><br></pre></td></tr></table></figure>
+
+<p>加入mysql的jdbc驱动包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /export/server/hive/lib/mysql-connector-java-5.1.32.jar /export/server/sqoop/lib/</span><br></pre></td></tr></table></figure>
+
+<p>验证启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bin/sqoop list-databases \</span><br><span class="line"></span><br><span class="line"> --connect jdbc:mysql://node1:3306/ \</span><br><span class="line"> </span><br><span class="line"> --username root --password hadoop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_4-2/2.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Sqoop(1)/" data-id="clj264d89000bboub8ivthxol" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Sqoop(2)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Sqoop(2)/">Sqoop(2)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Sqoop(2)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.299Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Sqoop（2）"><a href="#Sqoop（2）" class="headerlink" title="Sqoop（2）"></a>Sqoop（2）</h1><h2 id="Sqoop导入"><a href="#Sqoop导入" class="headerlink" title="Sqoop导入"></a>Sqoop导入</h2><p>导入是单个表从RDBMS到HDFS，表中的每一行被视为HDFS的记录，所有记录都存储为文本文件的文本数据。</p>
+<h3 id="全量导入mysql表数据到HDFS"><a href="#全量导入mysql表数据到HDFS" class="headerlink" title="全量导入mysql表数据到HDFS"></a>全量导入mysql表数据到HDFS</h3><p>从MySQL数据库服务器中的emp表导入HDFS。</p>
+<p>命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#example1-mysql-hdfs-start</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--target-dir /sqoop/sqoopresult \</span><br><span class="line">--table emp --m 1</span><br></pre></td></tr></table></figure>
+
+<p>参数：</p>
+<p>–target-dir可以用来指定导出数据存放至HDFS的目录；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -cat /sqoop/sqoopresult2/part-m-00000</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/1.png"></p>
+<p>查看导入的数据：</p>
+<p><img src="/../image_5-2/2.png"></p>
+<p>注意：</p>
+<p>- mysql的地址尽量不要使用localhost  请使用ip或者host</p>
+<p>- 如果不指定，导入到hdfs默认分隔符是  “,”</p>
+<p>- 可以通过– fields-terminated-by ‘\t’指定具体的分隔符</p>
+<p>- 如果表的数据比较大 可以并行启动多个maptask执行导入操作，如果表没有主键，请指定根据哪个字段进行切分（使用–m 指定并行度）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#example2-mysql-hdfs-terminated</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--target-dir /sqoop/sqoopresult2 \</span><br><span class="line">--fields-terminated-by &#x27;\t&#x27; \</span><br><span class="line">--table emp --m 1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/3.png"></p>
+<p><img src="/../image_5-2/4.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#example3-mysql-hdfs-split</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--target-dir /sqoop/sqoopresult3 \</span><br><span class="line">--fields-terminated-by &#x27;\t&#x27; \</span><br><span class="line">--split-by id \</span><br><span class="line">--table emp --m 2</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/5.png"></p>
+<p><img src="/../image_5-2/6.png"></p>
+<h3 id="全量导入mysql表数据到Hive"><a href="#全量导入mysql表数据到Hive" class="headerlink" title="全量导入mysql表数据到Hive"></a>全量导入mysql表数据到Hive</h3><p>方式一：先复制表结构到hive中再导入数据</p>
+<p>（1） 在hive中新建数据库sqoop_test用于测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create database if not exists sqoop_test comment &quot;this is sqoop db&quot; with dbproperties(&#x27;createdBy&#x27;=&#x27;zlh&#x27;);</span><br><span class="line"></span><br><span class="line">use sqoop_test;</span><br><span class="line"></span><br><span class="line">show tables;</span><br><span class="line"></span><br><span class="line">desc formatted emp_add_sp;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/7.png"></p>
+<p>（2） 将关系型数据的表结构复制到hive中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#example4-1-mysql-hive-structure</span><br><span class="line"></span><br><span class="line">bin/sqoop create-hive-table \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--table emp_add \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--hive-table sqoop_test.emp_add_sp</span><br></pre></td></tr></table></figure>
+
+<p>参数：</p>
+<p>–table emp_add为mysql中的数据库userdb中的表。  </p>
+<p>–hive-table emp_add_sp 为hive中新建的表名称。</p>
+<p><img src="/../image_5-2/8.png"></p>
+<p><img src="/../image_5-2/9.png"></p>
+<p>（3） 从关系数据库导入文件到hive中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#example4-2-mysql-hive-data</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table emp_add \</span><br><span class="line">--hive-table sqoop_test.emp_add_sp \</span><br><span class="line">--hive-import \</span><br><span class="line">--m 1</span><br></pre></td></tr></table></figure>
+
+<p>方式二：直接复制表结构数据到hive中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#example5-mysql-hive</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table emp_conn \</span><br><span class="line">--hive-import \</span><br><span class="line">--m 1 \</span><br><span class="line">--hive-database sqoop_test;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/10.png"></p>
+<h3 id="导入表数据子集-where过滤"><a href="#导入表数据子集-where过滤" class="headerlink" title="导入表数据子集(where过滤)"></a>导入表数据子集(where过滤)</h3><p>–where可以指定从关系数据库导入数据时的查询条件。它执行在数据库服务器相应的SQL查询，并将结果存储在HDFS的目标目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#example6-mysql-hdfs-where</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--where &quot;city =&#x27;sec-bad&#x27;&quot; \</span><br><span class="line">--target-dir /sqoop/wherequery \</span><br><span class="line">--table emp_add --m 1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/11.png"></p>
+<p><img src="/../image_5-2/12.png"> </p>
+<h3 id="导入表数据子集-query查询"><a href="#导入表数据子集-query查询" class="headerlink" title="导入表数据子集(query查询)"></a>导入表数据子集(query查询)</h3><p>注意事项：</p>
+<p>-使用query sql语句来进行查找不能加参数–table ;</p>
+<p>-并且必须要添加where条件;</p>
+<p>-并且where条件后面必须带一个$CONDITIONS 这个字符串;</p>
+<p>-并且这个sql语句必须用单引号，不能用双引号;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#example7-mysql-hdfs-query</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--target-dir /sqoop/wherequery2 \</span><br><span class="line">--query &#x27;select id,name,deg from emp WHERE  id&gt;1203 and $CONDITIONS&#x27; \</span><br><span class="line">--split-by id \</span><br><span class="line">--fields-terminated-by &#x27;\001&#x27; \</span><br><span class="line">--m 2</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/13.png"></p>
+<p><img src="/../image_5-2/14.png"></p>
+<p>sqoop命令中–split-by id通常配合-m 10参数使用；首先sqoop会向关系型数据库比如mysql发送一个命令:select max(id),min(id) from test，然后会把max、min之间的区间平均分为10分，最后10个并行的map去找数据库，导数据就正式开始。</p>
+<h3 id="增量导入"><a href="#增量导入" class="headerlink" title="增量导入"></a>增量导入</h3><p>参数：</p>
+<p>–check-column (col)</p>
+<p>用来指定一些列，这些列在增量导入时用来检查这些数据是否作为增量数据进行导入，和关系型数据库中的自增字段及时间戳类似。</p>
+<p>注意:这些被指定的列的类型不能使任意字符类型，如char、varchar等类型都是不可以的，同时– check-column可以去指定多个列。</p>
+<p>–incremental (mode)</p>
+<p>append：追加，比如对大于last-value指定的值之后的记录进行追加导入。</p>
+<p>lastmodified：最后的修改时间，追加last-value指定的日期之后的记录</p>
+<p>–last-value (value)</p>
+<p>指定自从上次导入后列的最大值（大于该指定的值），也可以自己设定某一值</p>
+<p>（1） Append模式增量导入</p>
+<p>导入数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#example8-1-mysql-hdfs-append</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--target-dir /sqoop/appendresult \</span><br><span class="line">--table emp --m 1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/15.png"></p>
+<p><img src="/../image_5-2/16.png"></p>
+<p>使用hdfs dfs -cat查看生成的数据文件，发现数据已经导入到hdfs中</p>
+<p>然后在mysql的emp表中插入2条数据:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">insert into `userdb`.`emp` (`id`, `name`, `deg`, `salary`, `dept`) values (&#x27;1111&#x27;, &#x27;allen&#x27;, &#x27;admin&#x27;, &#x27;33333&#x27;, &#x27;tp&#x27;);</span><br><span class="line">insert into `userdb`.`emp` (`id`, `name`, `deg`, `salary`, `dept`) values (&#x27;2222&#x27;, &#x27;woon&#x27;, &#x27;admin&#x27;, &#x27;44444&#x27;, &#x27;tp&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p>执行如下的指令，实现增量的导入:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#example8-2-mysql-hdfs-append</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table emp --m 1 \</span><br><span class="line">--target-dir /sqoop/appendresult \</span><br><span class="line">--incremental append \</span><br><span class="line">--check-column id \</span><br><span class="line">--last-value 1205</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/17.png"></p>
+<p><img src="/../image_5-2/18.png"></p>
+<p>总结：增量数据的导入</p>
+<p>- 所谓的增量数据指的是上次至今中间新增加的数据</p>
+<p>- sqoop支持两种模式的增量导入 </p>
+<p>- append追加根据数值类型字段进行追加导入大于指定的last-value</p>
+<p>- lastmodified根据时间戳类型字段进行追加大于等于指定的last-value</p>
+<p>- 注意在lastmodified模式下还分为两种情形：append、merge-key</p>
+<p>最后验证导入数据目录 可以发现多了一个文件 里面就是增量数据</p>
+<p><img src="/../image_5-2/19.png"></p>
+<p>（2） Lastmodified模式增量导入</p>
+<p>首先创建一个customer表，指定一个时间戳字段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table customertest(id int,name varchar(20),last_mod timestamp default current_timestamp on update current_timestamp);</span><br></pre></td></tr></table></figure>
+
+<p>此处的时间戳设置为在数据的产生和更新时都会发生改变。</p>
+<p><img src="/../image_5-2/20.png"></p>
+<p>插入如下记录:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">insert into customertest(id,name) values(1,&#x27;neil&#x27;);</span><br><span class="line">insert into customertest(id,name) values(2,&#x27;jack&#x27;);</span><br><span class="line">insert into customertest(id,name) values(3,&#x27;martin&#x27;);</span><br><span class="line">insert into customertest(id,name) values(4,&#x27;tony&#x27;);</span><br><span class="line">insert into customertest(id,name) values(5,&#x27;eric&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/21.png"></p>
+<p>此时执行sqoop指令将数据导入hdfs:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#example9-1-mysql-hdfs-Lastmodified</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--target-dir /sqoop/lastmodifiedresult \</span><br><span class="line">--table customertest --m 1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/22.png"></p>
+<p>查看此时导入的结果数据：</p>
+<p><img src="/../image_5-2/23.png"></p>
+<p>再次插入一条数据进入customertest表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into customertest(id,name) values(6,&#x27;james&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/24.png"></p>
+<p>使用incremental的方式进行增量的导入:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#example9-2-mysql-hdfs-Lastmodified</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table customertest \</span><br><span class="line">--target-dir /sqoop/lastmodifiedresult \</span><br><span class="line">--check-column last_mod \</span><br><span class="line">--incremental lastmodified \</span><br><span class="line">--last-value &quot;2023-05-25 15:07:00&quot; \</span><br><span class="line">--m 1 \</span><br><span class="line">--append</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/25.png"></p>
+<p><img src="/../image_5-2/26.png"></p>
+<p>（3） Lastmodified模式：append、merge-key</p>
+<p>使用lastmodified模式进行增量处理要指定增量数据是以</p>
+<p>- append模式(附加)</p>
+<p>- merge-key(合并)模式添加</p>
+<p>下面演示使用merge-by的模式进行增量更新</p>
+<p>更新 id为1的name字段。</p>
+<p>update customertest set name &#x3D; ‘Neil’ where id &#x3D; 1;</p>
+<p>更新之后，这条数据的时间戳会更新为更新数据时的系统时间。</p>
+<p>执行如下指令，把id字段作为merge-key:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#example10-mysql-hdfs-merge-key</span><br><span class="line"></span><br><span class="line">bin/sqoop import \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table customertest \</span><br><span class="line">--target-dir /sqoop/lastmodifiedresult \</span><br><span class="line">--check-column last_mod \</span><br><span class="line">--incremental lastmodified \</span><br><span class="line">--last-value &quot;2019-05-28 18:42:06&quot; \</span><br><span class="line">--m 1 \</span><br><span class="line">--merge-key id</span><br></pre></td></tr></table></figure>
+
+<p>由于merge-key这种模式是进行了一次完整的mapreduce操作，因此最终我们在lastmodifiedresult文件夹下可以看到生成的为part-r-00000这样的文件，</p>
+<p>会发现id&#x3D;1的name已经得到修改，同时新增了id&#x3D;6的数据</p>
+<p>总结：</p>
+<p>关于lastmodified 中的两种模式：</p>
+<p>- append 只会追加增量数据到一个新的文件中，并且会产生数据的重复问题，因为默认是从指定的last-value 大于等于其值的数据开始导入</p>
+<p>- merge-key 把增量的数据合并到一个文件中  处理追加增量数据之外 如果之前的数据有变化修改，也可以进行修改操作 底层相当于进行了一次完整的mr作业。数据不会重复。</p>
+<h2 id="Sqoop导出"><a href="#Sqoop导出" class="headerlink" title="Sqoop导出"></a>Sqoop导出</h2><p>将数据从Hadoop生态体系导出到RDBMS数据库导出前，目标表必须存在于目标数据库中。</p>
+<p>export有三种模式：</p>
+<ol>
+<li>默认操作是从将文件中的数据使用INSERT语句插入到表中。</li>
+<li>更新模式：Sqoop将生成UPDATE替换数据库中现有记录的语句。</li>
+<li>调用模式：Sqoop将为每条记录创建一个存储过程调用。</li>
+</ol>
+<p>以下是export命令语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sqoop export (generic-args) (export-args)</span><br></pre></td></tr></table></figure>
+
+<h3 id="默认模式导出HDFS数据到mysql"><a href="#默认模式导出HDFS数据到mysql" class="headerlink" title="默认模式导出HDFS数据到mysql"></a>默认模式导出HDFS数据到mysql</h3><p>默认情况下，sqoop export将每行输入记录转换成一条INSERT语句，添加到目标数据库表中。如果数据库中的表具有约束条件（例如，其值必须唯一的主键列）并且已有数据存在，则必须注意避免插入违反这些约束条件的记录。如果INSERT语句失败，导出过程将失败。此模式主要用于将记录导出到可以接收这些结果的空表中。通常用于全表数据导出。</p>
+<p>导出时可以是将Hive表中的全部记录或者HDFS数据（可以是全部字段也可以部分字段）导出到Mysql目标表。</p>
+<p>（1） 准备HDFS数据</p>
+<p>在HDFS文件系统中<code>/emp/</code>目录的下创建一个文件emp_data.txt：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mkdir /export/data/sqoop-data/emp/</span><br><span class="line"></span><br><span class="line">vim emp_data.txt</span><br><span class="line"></span><br><span class="line">1201,gopal,manager,50000,TP</span><br><span class="line">1202,manisha,preader,50000,TP</span><br><span class="line">1203,kalil,php dev,30000,AC</span><br><span class="line">1204,prasanth,php dev,30000,AC</span><br><span class="line">1205,kranthi,admin,20000,TP</span><br><span class="line">1206,satishp,grpdes,20000,GR</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/27.png"></p>
+<p>（2） 上传至hdfs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -mkdir /sqoop/emp_data</span><br><span class="line">hadoop fs -put emp_data.txt /sqoop/emp_data </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/28.png"></p>
+<p>（3） 手动创建mysql中的目标表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use userdb;</span><br><span class="line"></span><br><span class="line">mysql&gt; create table employee ( </span><br><span class="line">   id int not null primary key, </span><br><span class="line">   name varchar(20), </span><br><span class="line">   deg varchar(20),</span><br><span class="line">   salary int,</span><br><span class="line">   dept varchar(10));</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/29.png"></p>
+<p>（4） 执行导出命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#example10-hdfs-mysql-export</span><br><span class="line"></span><br><span class="line">bin/sqoop export \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table employee \</span><br><span class="line">--columns id,name,deg,salary,dept \</span><br><span class="line">--export-dir /sqoop/emp_data/</span><br></pre></td></tr></table></figure>
+
+<p>（5） 相关配置参数</p>
+<p>–input-fields-terminated-by ‘\t’  指定文件中的分隔符</p>
+<p>–columns 选择列并控制它们的排序。当导出数据文件和目标表字段列顺序完全一致的时候可以不写。否则以逗号为间隔选择和排列各个列。没有被包含在–columns后面列名或字段要么具备默认值，要么就允许插入空值。否则数据库会拒绝接受sqoop导出的数据，导致Sqoop作业失败</p>
+<p>–export-dir 导出目录，在执行导出的时候，必须指定这个参数，同时需要具备–table或–call参数两者之一，</p>
+<p>–table是指的导出数据库当中对应的表，</p>
+<p>–call是指的某个存储过程。</p>
+<p>–input-null-string –input-null-non-string如果没有指定第一个参数，对于字符串类型的列来说，“NULL”这个字符串就回被翻译成空值，如果没有使用第二个参数，无论是“NULL”字符串还是说空字符串也好，对于非字符串类型的字段来说，这两个类型的空串都会被翻译成空值。比如：</p>
+<p>–input-null-string “\N” –input-null-non-string “\N”</p>
+<p>（6） 注意</p>
+<p>数据导出操作</p>
+<p>- 注意：导出的目标表需要自己手动提前创建 也就是sqoop并不会帮我们创建复制表结构</p>
+<p>- 导出有三种模式：</p>
+<p> - 默认模式  目标表是空表  底层把数据一条条insert进去</p>
+<p> - 更新模式  底层是update语句</p>
+<p> - 调用模式  调用存储过程</p>
+<p>- 相关配置参数</p>
+<p> - 导出文件的分隔符  如果不指定 默认以“,”去切割读取数据文件  –input-fields-terminated-by</p>
+<p> - 如果文件的字段顺序和表中顺序不一致 需要–columns 指定 多个字段之间以”,”</p>
+<p> - 导出的时候需要指定导出数据的目的 export-dir 和导出到目标的表名或者存储过程名</p>
+<p> - 针对空字符串类型和非字符串类型的转换  “\n”</p>
+<h3 id="更新导出（updateonly模式）"><a href="#更新导出（updateonly模式）" class="headerlink" title="更新导出（updateonly模式）"></a>更新导出（updateonly模式）</h3><p>（1） 参数说明</p>
+<p>– update-key,更新标识，即根据某个字段进行更新，例如id，可以指定多个更新标识的字段，多个字段之间用逗号分隔。</p>
+<p>– updatemod，指定updateonly（默认模式），仅仅更新已存在的数据记录，不会插入新纪录。</p>
+<p>（2） 准备HDFS数据</p>
+<p>在HDFS文件系统中<code>/sqoop/updateonly_1/</code>目录的下创建一个文件updateonly_1.txt：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1201,gopal,manager,50000</span><br><span class="line">1202,manisha,preader,50000</span><br><span class="line">1203,kalil,php dev,30000</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/30.png"></p>
+<p>（3） 手动创建mysql中的目标表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; USE userdb;</span><br><span class="line"></span><br><span class="line">mysql&gt; CREATE TABLE updateonly ( </span><br><span class="line">  id INT NOT NULL PRIMARY KEY, </span><br><span class="line">  name VARCHAR(20), </span><br><span class="line">  deg VARCHAR(20),</span><br><span class="line">  salary INT);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/31.png"></p>
+<p>（4） 先执行全部导出操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#example11-1-hdfs-mysql-export-updateonly</span><br><span class="line"></span><br><span class="line">bin/sqoop export \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table updateonly \</span><br><span class="line">--export-dir /sqoop/updateonly_1/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/32.png"></p>
+<p>（5） 查看此时mysql中的数据</p>
+<p><img src="/../image_5-2/33.png"></p>
+<p>（6） 新增一个文件</p>
+<p>新增一个文件updateonly_2.txt：修改了前三条数据并且新增了一条记录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1201,gopal,manager,1212</span><br><span class="line">1202,manisha,preader,1313</span><br><span class="line">1203,kalil,php dev,1414</span><br><span class="line">1204,allen,java,1515</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -mkdir /sqoop/updateonly_2</span><br><span class="line">hadoop fs -put updateonly_2.txt /sqoop/updateonly_2</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/34.png"></p>
+<p>（7） 执行更新导出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#example11-2-hdfs-mysql-export-updateonly</span><br><span class="line"></span><br><span class="line">bin/sqoop export \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table updateonly \</span><br><span class="line">--export-dir /sqoop/updateonly_2 \</span><br><span class="line">--update-key id \</span><br><span class="line">--update-mode updateonly</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/35.png">（8) 查看最终结果</p>
+<p>虽然导出时候的日志显示导出4条记录，但最终只进行了更新操作</p>
+<h3 id="更新导出（allowinsert模式）"><a href="#更新导出（allowinsert模式）" class="headerlink" title="更新导出（allowinsert模式）"></a>更新导出（allowinsert模式）</h3><p>（1） 参数说明</p>
+<p>– update-key，更新标识，即根据某个字段进行更新，例如id，可以指定多个更新标识的字段，多个字段之间用逗号分隔。</p>
+<p>– updatemod，指定allowinsert，更新已存在的数据记录，同时插入新纪录。实质上是一个insert &amp; update的操作。</p>
+<p>（2） 准备HDFS数据</p>
+<p>在HDFS<code>/sqoop/allowinsert_1/</code>目录的下创建一个文件allowinsert_1.txt：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1201,gopal,manager,50000</span><br><span class="line">1202,manisha,preader,50000</span><br><span class="line">1203,kalil,php dev,30000</span><br></pre></td></tr></table></figure>
+
+<p>（3） 手动创建mysql中的目标表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; USE userdb;</span><br><span class="line"></span><br><span class="line">mysql&gt; CREATE TABLE allowinsert ( </span><br><span class="line">  id INT NOT NULL PRIMARY KEY, </span><br><span class="line">  name VARCHAR(20), </span><br><span class="line">  deg VARCHAR(20),</span><br><span class="line">  salary INT);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/36.png"></p>
+<p>（4） 先执行全部导出操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#example12-1-hdfs-mysql-export-allowinsert</span><br><span class="line"></span><br><span class="line">bin/sqoop export \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--table allowinsert \</span><br><span class="line">--export-dir /sqoop/allowinsert_1/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/37.png"></p>
+<p>（5） 查看此时mysql中的数据</p>
+<p><img src="/../image_5-2/38.png"></p>
+<p>（6） 新增文件</p>
+<p>创建文件allowinsert_2.txt。修改前三条数据并且新增了一条记录。上传至<code> /sqoop/allowinsert_2/</code>目录下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1201,gopal,manager,1212</span><br><span class="line">1202,manisha,preader,1313</span><br><span class="line">1203,kalil,php dev,1414</span><br><span class="line">1204,allen,java,1515</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/39.png"></p>
+<p>（7） 执行更新导出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#example12-2-hdfs-mysql-export-allowinsert</span><br><span class="line"></span><br><span class="line">bin/sqoop export \</span><br><span class="line">--connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root --password hadoop \</span><br><span class="line">--table allowinsert \</span><br><span class="line">--export-dir /sqoop/allowinsert_2/ \</span><br><span class="line">--update-key id \</span><br><span class="line">--update-mode allowinsert</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/40.png"></p>
+<p>（8） 查看最终结果</p>
+<p>导出时候的日志显示导出4条记录，数据进行更新操作的同时也进行了新增的操作</p>
+<p><img src="/../image_5-2/41.png"></p>
+<p>（9） 总结</p>
+<p>更新导出</p>
+<p>- updateonly  只更新已经存在的数据  不会执行insert增加新的数据</p>
+<p>- allowinsert  更新已有的数据  插入新的数据 底层相当于insert&amp;update</p>
+<h2 id="sqoop-job作业介绍"><a href="#sqoop-job作业介绍" class="headerlink" title="sqoop job作业介绍"></a>sqoop job作业介绍</h2><h3 id="job语法"><a href="#job语法" class="headerlink" title="job语法"></a>job语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sqoop job (generic-args) (job-args)[-- [subtool-name] (subtool-args)]</span><br><span class="line">$ sqoop-job (generic-args) (job-args)[-- [subtool-name] (subtool-args)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建job-–create"><a href="#创建job-–create" class="headerlink" title="创建job(–create)"></a>创建job(–create)</h3><p>在这里，我们创建一个名为myjob，这可以从RDBMS表的数据导入到HDFS作业。下面的命令用于创建一个从DB数据库的employee表导入到HDFS文件的作业。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#example13-1-mysql-hdfs-job</span><br><span class="line"></span><br><span class="line">bin/sqoop job --create myjob -- import --connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password hadoop \</span><br><span class="line">--target-dir /sqoop/sqoopresult555 \</span><br><span class="line">--table emp --m 1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/42.png"></p>
+<h3 id="验证job-–list"><a href="#验证job-–list" class="headerlink" title="验证job (–list)"></a>验证job (–list)</h3><p>–list参数是用来验证保存的作业。下面的命令用来验证保存Sqoop作业的列表。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#example13-2-mysql-hdfs-job</span><br><span class="line"></span><br><span class="line">bin/sqoop job –list</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/43.png"></p>
+<h3 id="检查job-–show"><a href="#检查job-–show" class="headerlink" title="检查job(–show)"></a>检查job(–show)</h3><p>–show参数用于检查或验证特定的工作，及其详细信息。以下命令和样本输出用来验证一个名为myjob的作业。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#example13-3-mysql-hdfs-job</span><br><span class="line"></span><br><span class="line">bin/sqoop job --show myjob</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_5-2/44.png"></p>
+<p>它显示了工具和它们的选择，这是使用在myjob中作业情况。</p>
+<h3 id="执行job-–exec"><a href="#执行job-–exec" class="headerlink" title="执行job (–exec)"></a>执行job (–exec)</h3><p>–exec选项用于执行保存的作业。下面的命令用于执行保存的作业称为myjob。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#example13-4-mysql-hdfs-job</span><br><span class="line"></span><br><span class="line">bin/sqoop job --exec myjob</span><br></pre></td></tr></table></figure>
+
+<p>sqoop需要输入mysql密码</p>
+<h3 id="job的免密输入"><a href="#job的免密输入" class="headerlink" title="job的免密输入"></a>job的免密输入</h3><p>sqoop在创建job时，使用–password-file参数，可以避免输入mysql密码，如果使用–password将出现警告，并且每次都要手动输入密码才能执行job，sqoop规定密码文件必须存放在HDFS上，并且权限必须是400。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo -n &quot;hadoop&quot; &gt; node1-mysql.pwd</span><br><span class="line"></span><br><span class="line">hadoop fs -mkdir -p /sqoop/pwd/</span><br><span class="line">hadoop fs -put node1-mysql.pwd /sqoop/pwd/</span><br><span class="line">hadoop fs -chmod 400 /sqoop/pwd/node1-mysql.pwd</span><br></pre></td></tr></table></figure>
+
+<p>检查sqoop的sqoop-site.xml是否存在如下配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;sqoop.metastore.client.record.password&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;description&gt;If true, allow saved passwords in the metastore.</span><br><span class="line">  &lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>（1） 创建sqoop job</p>
+<p>在创建job时，使用–password-file参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#example14-1-mysql-hdfs-job-nopwd</span><br><span class="line"></span><br><span class="line">bin/sqoop job --create myjob2 -- import --connect jdbc:mysql://node1:3306/userdb \</span><br><span class="line">--username root \</span><br><span class="line">--password-file /sqoop/pwd/node1-mysql.pwd \</span><br><span class="line">--target-dir /sqoop/sqoopresult666 \</span><br><span class="line">--table emp --m 1</span><br></pre></td></tr></table></figure>
+
+<p>（2） 执行job</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#example14-2-mysql-hdfs-job-nopwd</span><br><span class="line"></span><br><span class="line">sqoop job -exec myjob2</span><br></pre></td></tr></table></figure>
+
+<p>如果password文件格式错误会有如下提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR manager.SqlManager: Error executing statement: java.sql.SQLException: Access denied for user &#x27;root&#x27;@&#x27;spark220&#x27; (using password: YES)</span><br><span class="line"></span><br><span class="line">ERROR tool.ImportTool: Encountered IOException running import job: java.io.IOException: No columns to generate for ClassWriter at org.apache.sqoop.orm.ClassWriter.generate(ClassWriter.java:1652)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Sqoop(2)/" data-id="clj264d8a000dboub8o734sxg" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Flume(3)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Flume(3)/">Flume(3)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(3)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.298Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Flume（3）"><a href="#Flume（3）" class="headerlink" title="Flume（3）"></a>Flume（3）</h1><h2 id="Flume-综合实战案例"><a href="#Flume-综合实战案例" class="headerlink" title="Flume 综合实战案例"></a>Flume 综合实战案例</h2><h3 id="案例场景"><a href="#案例场景" class="headerlink" title="案例场景"></a>案例场景</h3><p>A、B、C等日志服务机器实时生产日志，日志的内容分为多种类型：</p>
+<p>APP端用户行为日志、微信小程序端用户行为日志、PC端用户行为日志</p>
+<p>需求：</p>
+<p>把日志服务器中的各类日志数据采集汇总到一个中转agent上，然后分类写入hdfs中。</p>
+<p>在hdfs中要求的目录为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/source/logs/app_log/20160101/</span><br><span class="line">/source/logs/wxapp_log/20160101/</span><br><span class="line">/source/logs/pcweb_log/20160101/</span><br></pre></td></tr></table></figure>
+
+<p>linux命令操作替换jar包中的文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">显示jar中的文件列表：  jar -tvf xx.jar</span><br><span class="line">解压jar中的指定文件：  jar -xvf xx.jar yy.properties</span><br><span class="line">更新jar中的指定文件：  jar -uvf xx.jar yy.properties</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 每台日志服务器上部署一个flume agent --&gt;上游，每个agent配置2个source对应2类数据</span><br><span class="line">2. 上游的agent在采集数据时，添加一个header，指定数据的类别</span><br><span class="line">3. 上游的agent要配置两个avro sink，各自对接一个下级的agent</span><br><span class="line">4. 上游还要配置sink processor，fail over sink processor，控制两个sink中只有一个avro sink在工作，如果失败再切换到另一个avro sink</span><br><span class="line">5. 上游还要配置字段加密拦截器</span><br><span class="line">6. 下游配置两个flume agent，使用avro source接收数据</span><br><span class="line">7. 下游的hdfs sink，目录配置使用动态通配符，取到event中的类别header，以便于将不同类别数据写入不同hdfs目录 </span><br></pre></td></tr></table></figure>
+
+<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><h4 id="部署行为日志生产模拟器"><a href="#部署行为日志生产模拟器" class="headerlink" title="部署行为日志生产模拟器"></a>部署行为日志生产模拟器</h4><p>准备一个mysql服务器，并创建一个库：realtimedw</p>
+<p><img src="/../image_3-2/1.png"></p>
+<p>将realtimedw.sql这个脚本，导入到realtimedw库中</p>
+<p><img src="/../image_3-2/2.png"></p>
+<p>将t_md_areas.sql这个脚本，导入到realtimedw库中</p>
+<p><img src="/../image_3-2/3.png"></p>
+<p>准备其他数据文件目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/data/flume-example-data/loginit</span><br></pre></td></tr></table></figure>
+
+<p>修改jar包中的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">log_gen_app.jar包中的配置文件修改</span><br><span class="line">other.properties、log4j.properties</span><br><span class="line"></span><br><span class="line">log_gen_wx.jar包中的配置文件修改</span><br><span class="line">other.properties、log4j.properties</span><br></pre></td></tr></table></figure>
+
+<p>上传jar包，执行启动命令</p>
+<p>在<code>/export/data/flume-example-data/loginit </code>中添加shell文件用以启动日志生成器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim genapplog.sh</span><br><span class="line">java -Xss102400k -cp log_gen_app.jar cn.doitedu.loggen.entry.GenAppLog 1 &gt; /dev/null 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br><span class="line">vim genwxlog.sh</span><br><span class="line">java -Xss102400k -cp log_gen_wx.jar cn.doitedu.loggen.entry.GenWxAppLog 1 &gt; /dev/null 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br><span class="line">sh genapplog.sh</span><br><span class="line">sh genwxlog.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动测试"><a href="#启动测试" class="headerlink" title="启动测试"></a>启动测试</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.先把自定义拦截器代码jar包放入上游（node1）flume的lib目录中；</span><br><span class="line">2.将各台机器上之前的一些checkpoint、缓存等目录清除；</span><br><span class="line">3.启动下游的两个agent（node2、node3上）；</span><br><span class="line">4.在上游的机器上，创建日志数据目录，并写脚本模拟往3类日志中写入日志：</span><br><span class="line">5.在上游的所有机器上启动flume agent</span><br><span class="line">6.到hdfs上观察结果</span><br><span class="line">7.尝试kill掉下游node2的 agent，看是否能够故障切换</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行截图"><a href="#运行截图" class="headerlink" title="运行截图"></a>运行截图</h4><p><img src="/../image_3-2/4.png"></p>
+<p><img src="/../image_3-2/5.png"></p>
+<p><img src="/../image_3-2/6.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(3)/" data-id="clj264d850004boubagrj0m57" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Kafka" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Kafka/">Kafka</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Kafka/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.298Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h1><h2 id="Kafka简介"><a href="#Kafka简介" class="headerlink" title="Kafka简介"></a>Kafka简介</h2><h3 id="什么是Kafka"><a href="#什么是Kafka" class="headerlink" title="什么是Kafka"></a>什么是Kafka</h3><p>Kafka是一个分布式流处理系统，流处理系统使它可以像消息队列一样publish或者subscribe消息，分布式提供了容错性，并发处理消息的机制。</p>
+<h3 id="Kafka的基本概念"><a href="#Kafka的基本概念" class="headerlink" title="Kafka的基本概念"></a>Kafka的基本概念</h3><p>kafka运行在集群上，集群包含一个或多个服务器。kafka把消息存在topic中，每一条消息包含键值（key），值（value）和时间戳（timestamp）。</p>
+<p>kafka有以下一些基本概念：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Producer- 消息生产者，就是向kafka broker发消息的客户端。</span><br><span class="line">Consumer- 消息消费者，是消息的使用方，负责消费Kafka服务器上的消息。</span><br><span class="line">Topic- 主题，由用户定义并配置在Kafka服务器，用于建立Producer和Consumer之间的订阅关系。生产者发送消息到指定的Topic下，消息者从这个Topic下消费消息。</span><br><span class="line">Partition- 消息分区，一个topic可以分为多个 partition，每个partition是一个有序的队列。partition中的每条消息都会被分配一个有序的id（offset）。</span><br><span class="line">Broker- 一台kafka服务器就是一个broker。一个集群由多个broker组成。一个broker可以容纳多个topic。</span><br><span class="line">Consumer Group - 消费者分组，用于归组同类消费者。每个consumer属于一个特定的consumer group，多个消费者可以共同消息一个Topic下的消息，每个消费者消费其中的部分消息，这些消费者就组成了一个分组，拥有同一个分组名称，通常也被称为消费者集群。</span><br><span class="line">Offset- 消息在partition中的偏移量。每一条消息在partition都有唯一的偏移量，消息者可以指定偏移量来指定要消费的消息。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Kafka集群搭建"><a href="#Kafka集群搭建" class="headerlink" title="Kafka集群搭建"></a>Kafka集群搭建</h2><h3 id="Kafka基础环境要求"><a href="#Kafka基础环境要求" class="headerlink" title="Kafka基础环境要求"></a>Kafka基础环境要求</h3><p>Kafka集群中每一台服务器都需要有ZooKeeper</p>
+<h3 id="安装Kafka集群"><a href="#安装Kafka集群" class="headerlink" title="安装Kafka集群"></a>安装Kafka集群</h3><p>这里以kafka 2.12-2.41版本为例开始搭建。</p>
+<p>可以注意到Kafka的版本号为：kafka_2.12-2.4.1，因为kafka主要是使用scala语言开发的，2.12为scala的版本号。<a target="_blank" rel="noopener" href="http://kafka.apache.org/downloads%E5%8F%AF%E4%BB%A5%E6%9F%A5%E7%9C%8B%E5%88%B0%E6%AF%8F%E4%B8%AA%E7%89%88%E6%9C%AC%E7%9A%84%E5%8F%91%E5%B8%83%E6%97%B6%E9%97%B4%E3%80%82">http://kafka.apache.org/downloads可以查看到每个版本的发布时间。</a></p>
+<h4 id="上传安装包"><a href="#上传安装包" class="headerlink" title="上传安装包"></a>上传安装包</h4><p>(注：不想去官网下载到本地的也可以使用<code>wget https://mirrors.bfsu.edu.cn/apache/kafka/</code>版本号，进行下载)</p>
+<p><img src="/../image_7-2/1.png"></p>
+<p>说明：kafka名中的2.12是Scala语言版本，后面的2.4.1是kafka版本，端口默认为9092</p>
+<h4 id="移动文件夹到指定目录"><a href="#移动文件夹到指定目录" class="headerlink" title="移动文件夹到指定目录"></a>移动文件夹到指定目录</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv kafka_2.12-2.4.1.tgz /export/server</span><br><span class="line"></span><br><span class="line">tar -zxvf kafka_2.12-2.4.1.tgz</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h4><p>(1) 进入配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/kafka_2.11-2.0.0/config</span><br></pre></td></tr></table></figure>
+
+<p>(2) 编辑配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi server.properties</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/2.png"></p>
+<p><img src="/../image_7-2/3.png"> </p>
+<h4 id="分发Kafka到node2，node3"><a href="#分发Kafka到node2，node3" class="headerlink" title="分发Kafka到node2，node3"></a>分发Kafka到node2，node3</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/</span><br><span class="line"></span><br><span class="line">scp -r /export/server/kafka_2.12-2.4.1/ root@node2:/export/server/</span><br><span class="line">scp -r /export/server/kafka_2.12-2.4.1/ root@node3:/export/server/</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile </span><br><span class="line"></span><br><span class="line">export KAFKA_HOME=/export/server/kafka </span><br><span class="line">export PATH=$PATH:$KAFKA_HOME/bin </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/4.png"> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/5.png"> </p>
+<p>#注意:还需要分发环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scp -r /etc/profile root@node2:/etc/profile</span><br><span class="line"></span><br><span class="line">scp -r /etc/profile root@node3:/etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/6.png"> </p>
+<p>#分别在node2和node3上修改配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /export/server/kafka/config/server.properties</span><br><span class="line"></span><br><span class="line">broker.id=1 </span><br><span class="line">broker.id=2</span><br></pre></td></tr></table></figure>
+
+<p>#(broker.id 不能重复)</p>
+<p><img src="/../image_7-2/7.png"> </p>
+<p><img src="/../image_7-2/8.png"> </p>
+<h4 id="启停集群-在各个节点上启动"><a href="#启停集群-在各个节点上启动" class="headerlink" title="启停集群(在各个节点上启动)"></a>启停集群(在各个节点上启动)</h4><p>#启动集群</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-server-start.sh -daemon /export/server/kafka/config/server.properties </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/9.png"></p>
+<p>#停止集群</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-server-stop.sh stop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/10.png"></p>
+<h4 id="Kafka一键启停脚本"><a href="#Kafka一键启停脚本" class="headerlink" title="Kafka一键启停脚本"></a>Kafka一键启停脚本</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#kafka一键启停脚本</span><br><span class="line">#!/bin/bash</span><br><span class="line">if [ $# -eq 0 ]</span><br><span class="line">then</span><br><span class="line">echo &quot;please input param:start stop&quot;</span><br><span class="line">else</span><br><span class="line"></span><br><span class="line">if [ $1 = start  ]</span><br><span class="line">then</span><br><span class="line">for i in &#123;1..3&#125;</span><br><span class="line">do</span><br><span class="line">echo &quot;$&#123;1&#125;ing node$&#123;i&#125;&quot;</span><br><span class="line">ssh node$&#123;i&#125; &quot;source /etc/profile;/export/server/kafka/bin/kafka-server-start.sh -daemon /export/server/kafka/config/server.properties&quot;</span><br><span class="line">done</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $1 = stop ]</span><br><span class="line">then</span><br><span class="line">for i in &#123;1..3&#125;</span><br><span class="line">do</span><br><span class="line">ssh node$&#123;i&#125; &quot;source /etc/profile;/export/server/kafka/bin/kafka-server-stop.sh&quot;</span><br><span class="line">done</span><br><span class="line">fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/11.png"></p>
+<p>(1)启动</p>
+<p><img src="/../image_7-2/12.png"></p>
+<p>(2)关闭</p>
+<p><img src="/../image_7-2/13.png"></p>
+<h3 id="Kafka常用操作"><a href="#Kafka常用操作" class="headerlink" title="Kafka常用操作"></a>Kafka常用操作</h3><h4 id="创建topic"><a href="#创建topic" class="headerlink" title="创建topic"></a>创建topic</h4><p>创建一个topic（主题）。Kafka中所有的消息都是保存在主题中，要生产消息到Kafka，首先必须要有一个确定的主题。</p>
+<p>(1)基本方式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./kafka-topics.sh --create --topic tpc_1 --partitions 2 --replication-factor 2 --zookeeper node1:2181</span><br><span class="line"></span><br><span class="line">--replication-factor 副本数量</span><br><span class="line">--partitions 分区数量</span><br><span class="line">--topic topic 名称</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/14.png"></p>
+<p>(2)手动指定副本的存储位置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --topic tpc_1 --zookeeper node1:2181 --replica-assignment 0:1,1:2</span><br></pre></td></tr></table></figure>
+
+<p>(3)bootstrap方式</p>
+<p>创建名为test的主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --bootstrap-server node1:9092 --topic test</span><br></pre></td></tr></table></figure>
+
+<p>查看目前Kafka中的主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --list --bootstrap-server node1:9092</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/15.png"></p>
+<h4 id="删除topic"><a href="#删除topic" class="headerlink" title="删除topic"></a>删除topic</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh  --delete --topic tpc_1 --zookeeper node1:2181</span><br></pre></td></tr></table></figure>
+
+<p>(异步线程去删除)删除 topic,需要一个参数处于启用状态: delete.topic.enable &#x3D; true,否则删不掉</p>
+<p><img src="/../image_7-2/16.png"></p>
+<h4 id="查看topic"><a href="#查看topic" class="headerlink" title="查看topic"></a>查看topic</h4><p>(1)列出当前系统中的所有 topic </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --zookeeper node1:2181,node2:2181,node3:2181 –list</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/17.png"></p>
+<p>(2)查看 topic 详细信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --topic tpc_1  --zookeeper node1:2181 --replica-assignment 0:1,1:2</span><br><span class="line"></span><br><span class="line">bin/kafka-topics.sh --describe --topic tpc_1 --zookeeper node1:2181</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/18.png"></p>
+<h4 id="增加分区"><a href="#增加分区" class="headerlink" title="增加分区"></a>增加分区</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --alter --topic tpc_1 --partitions 3 --zookeeper node1:2181</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/19.png"></p>
+<p>Kafka 只支持增加分区,不支持减少分区</p>
+<p>原因是:减少分区,代价太大(数据的转移,日志段拼接合并)</p>
+<h4 id="动态配置topic参数"><a href="#动态配置topic参数" class="headerlink" title="动态配置topic参数"></a>动态配置topic参数</h4><p>(1) 添加、修改配置参数(开启压缩发送传输种提高kafka消息吞吐量的有效办法(‘gzip’, ‘snappy’, ‘lz4’, ‘zstd’)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-configs.sh --zookeeper node1:2181 --entity-type topics --entity-name tpc_1 --alter --add-config compression.type=gzip</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/20.png"> </p>
+<p>(3)删除配置参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-configs.sh --zookeeper node1:2181 --entity-type topics --entity-name tpc_1 --alter --delete-config compression.type</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/21.png"> </p>
+<h4 id="生产信息到Kafka并进行消费"><a href="#生产信息到Kafka并进行消费" class="headerlink" title="生产信息到Kafka并进行消费"></a>生产信息到Kafka并进行消费</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-producer.sh --broker-list node1:9092, node2:9092, node3:909</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/22.png"></p>
+<p>(1)消费消息(从头开始)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092, node2:9092, node1:9092 --topic tpc_1 --from-beginning</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_7-2/23.png"></p>
+<p>(2)指定要消费的分区,和要消费的起始 offset </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server node1:9092,node2:9092,node3:9092 --topic tcp_1 --offset 2 --partition 0</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Kafka/" data-id="clj264d860006boub6vo9d65m" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Flume(2)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Flume(2)/">Flume(2)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(2)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Flume（2）"><a href="#Flume（2）" class="headerlink" title="Flume（2）"></a>Flume（2）</h1><h2 id="配置自定义拦截器"><a href="#配置自定义拦截器" class="headerlink" title="配置自定义拦截器"></a>配置自定义拦截器</h2><p>（1）将自定义拦截器打包成jar包上传到Flume安装目录下lib目录</p>
+<p>（2）在node1和node2上配置上游案例文件在conf目录下创建<code>example9-1-taildir-f-avro-interceptor.conf</code>在node3上配置下游案例文件创建<code>example9-2-avro-f-hdfs-interceptor.conf</code></p>
+<p> <img src="/../image_2-2/1.png"></p>
+<p> <img src="/../image_2-2/2.png"> </p>
+<p>（3）启动下游node3上的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-2-avro-f-hdfs-interceptor.</span><br><span class="line">conf -Dflume.root.logger=DEBUG,console</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/../image_2-2/3.png"> </p>
+<p>（4）启动上有的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-1-taildir-f-avro-int</span><br><span class="line">erceptor.conf 1&gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>（5）去hdfs上查看是否上传成功</p>
+<p><img src="/../image_2-2/4.png"> </p>
+<h2 id="Replicating-Channel-Selector选择器的配置"><a href="#Replicating-Channel-Selector选择器的配置" class="headerlink" title="Replicating Channel Selector选择器的配置"></a>Replicating Channel Selector选择器的配置</h2><p>（1）在node1上配置<code>example10-channel-replicating.conf</code></p>
+<p> <img src="/../image_2-2/5.png"> </p>
+<p>（2）启动</p>
+<p> <img src="/../image_2-2/6.png"> </p>
+<h2 id="Multiplexing-Channel-Selector配置"><a href="#Multiplexing-Channel-Selector配置" class="headerlink" title="Multiplexing Channel Selector配置"></a>Multiplexing Channel Selector配置</h2><p>（1）在myconf中在配置<code>example11-channel-Multiplexing.conf</code></p>
+<p> <img src="/../image_2-2/7.png"> </p>
+<p>（2）启动一下agent</p>
+<p> <img src="/../image_2-2/8.png"> </p>
+<p>这里通过事件的header值来判断将事件发送到哪个channel，还可以配合拦截器一起使用</p>
+<h2 id="Failover-Sink-Processor处理器的配置和使用"><a href="#Failover-Sink-Processor处理器的配置和使用" class="headerlink" title="Failover Sink Processor处理器的配置和使用"></a>Failover Sink Processor处理器的配置和使用</h2><p>（1）在上游node1上配置<code>example12-1-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/9.png"> </p>
+<p>（2）在node2node3上配置下游文件<code>example12-2-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/10.png"> </p>
+<p>（1）一组中只有优先级高的那个sink在工作，另一个是等待中</p>
+<p>（2）如果高优先级的sink发送数据失败，则专用低优先级的sink去工作，并且，在配置时间penalty之后，还会尝试用高优先级的去发送数据。</p>
+<p>（3）故障转移处理器维护了一个带有优先级的sink列表，故障转移机制将失败的sink放入到一个冷却池中，如果sink成功发送了事件，将其放入到活跃池中，sink可以设置优先级，数字越高，优先级越高，如果一个sink发送事件失败，下一个有更高优先级的sink将被用来发送事件，比如，优先级100的比优先级80的先被使用，如果没有设置优先级，按配置文件中配置的顺序决定。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(2)/" data-id="clj264d830001boubf8gd9hh1" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Flume(1)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Flume(1)/">Flume(1)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(1)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Flume（1）"><a href="#Flume（1）" class="headerlink" title="Flume（1）"></a>Flume（1）</h1><p>将<code>apache-flume-1.9.0-bin.tar.gz</code>压缩包下载到虚拟机中，并解压和添加软链接</p>
+<p><img src="/../image_1-2/1.png"></p>
+<p>配置环境变量</p>
+<p><img src="/../image_1-2/2.png"></p>
+<p>添加配置文件，启动agent并使用Netcat进行测试</p>
+<p><img src="/../image_1-2/3.png"></p>
+<p><img src="/../image_1-2/4.png"></p>
+<p><img src="/../image_1-2/5.png"></p>
+<h2 id="exec-source测试"><a href="#exec-source测试" class="headerlink" title="exec_source测试"></a>exec_source测试</h2><p>准备一个日志文件并写一个脚本模拟往日志文件中持续写入数据</p>
+<p><img src="/../image_1-2/6.png"></p>
+<p>创建一个flume自定义配置文件</p>
+<p><img src="/../image_1-2/7.png"></p>
+<p>启动flume采集</p>
+<p><img src="/../image_1-2/8.png"></p>
+<h2 id="spooldir-source测试"><a href="#spooldir-source测试" class="headerlink" title="spooldir_source测试"></a>spooldir_source测试</h2><p>采集spooldir目录下未被采集的数据 </p>
+<p><img src="/../image_1-2/9.png"></p>
+<p><img src="/../image_1-2/10.png"></p>
+<p><img src="/../image_1-2/11.png"></p>
+<h2 id="taildir-source测试"><a href="#taildir-source测试" class="headerlink" title="taildir_source测试"></a>taildir_source测试</h2><p>监视指定目录下的一批文件，并将某个文件中新写入的行记录到一个指定的目录中保存 <img src="/../image_1/12.png"></p>
+<p><img src="/../image_1-2/13.png"></p>
+<p>​                                                    <img src="/../image_1-2/14.png"></p>
+<h2 id="avro-source"><a href="#avro-source" class="headerlink" title="avro source"></a>avro source</h2><p><img src="/../image_1-2/15.png">  <img src="/../image_1-2/16.png"></p>
+<p><img src="/../image_1-2/17.png"></p>
+<p><img src="/../image_1-2/18.png"></p>
+<h2 id="使用File-Channel实现数据持久化"><a href="#使用File-Channel实现数据持久化" class="headerlink" title="使用File Channel实现数据持久化"></a>使用File Channel实现数据持久化</h2><p><img src="/../image_1-2/19.png"></p>
+<p><img src="/../image_1-2/20.png"></p>
+<p><img src="/../image_1-2/21.png"></p>
+<p><img src="/../image_1-2/22.png"></p>
+<h2 id="利用avro-source和avro-sink实现agent级联"><a href="#利用avro-source和avro-sink实现agent级联" class="headerlink" title="利用avro source和avro sink实现agent级联"></a>利用avro source和avro sink实现agent级联</h2><p>启动hdfs，将上游配置文件，保存到node1,node2上，将下游配置文件，保存到node3上</p>
+<p><img src="/../image_1-2/23.png"></p>
+<p><img src="/../image_1-2/24.png"> </p>
+<p><img src="/../image_1-2/25.png"></p>
+<p>启动下游node3上的flume agent</p>
+<p><img src="/../image_1-2/26.png"></p>
+<p>在上游服务器上准备两个日志目录来生成模拟日志数据和利用shell脚本生成日志数据 </p>
+<p><img src="/../image_1-2/27.png"></p>
+<p><img src="/../image_1-2/28.png"></p>
+<p>启动node1和node2上的flume agent   <img src="/../image_1/29.png"></p>
+<p><img src="/../image_1-2/30.png"></p>
+<p>查看hdfs上是否生成数据</p>
+<p><img src="/../image_1-2/31.png"></p>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>拦截器相关测试    </p>
+<p><img src="/../image_1-2/32.png"></p>
+<p><img src="/../image_1-2/33.png"></p>
+<p>自定义拦截器</p>
+<p>启动hdfs，将上游配置文件，保存到node1,node2上,并将自定义的拦截器jar包保存到node1和node2flume的lib中，将下游配置文件，保存到node3上</p>
+<p><img src="/../image_1-2/34.png"></p>
+<p><img src="/../image_1-2/35.png"></p>
+<p><img src="/../image_1-2/36.png"></p>
+<p>启动下游的flume agent</p>
+<p><img src="/../image_1-2/37.png"></p>
+<p>在node1和node2上上传两个app日志目录来生成模拟日志数据 <img src="/../image_1/38.png"></p>
+<p><img src="/../image_1-2/39.png"></p>
+<p>启动node1和node2上的flume agent </p>
+<p><img src="/../image_1-2/40.png"></p>
+<p><img src="/../image_1-2/41.png"></p>
+<p>去hdfs上查看是否采集到数据</p>
+<p><img src="/../image_1-2/42.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(1)/" data-id="clj264d840002boub5qhsdhc1" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
     <article id="post-Spark(Yarn)" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -114,7 +1081,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clio563kk0005qsub1g00be48" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clj264d8a000cbouba9xge2aa" class="article-share-link">
         Share
       </a>
       
@@ -296,295 +1263,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clio563kb0000qsub1a6m7a52" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Hive" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Hive/">Hive配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Hive/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h1><p>​        本地模式部署本质上是将Hive默认的元数据存储介质由内嵌的Derby数据库替换为独立数据库，即MySQL数据库。本地模式部署Hive需要在一台虚拟机上同时安装MySQL和Hive，接下来，我们以虚拟机node2为例，使用本地模式部署Hive。</p>
-<h2 id="卸载原有MySQL组件"><a href="#卸载原有MySQL组件" class="headerlink" title="卸载原有MySQL组件"></a>卸载原有MySQL组件</h2><p>(1)查看MySQL服务状态</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status mysqld.service</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/1.png"></p>
-<p>(2)关闭MySQL服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop mysqld.service</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/2.png"></p>
-<p>(3)查找安装mysql的rpm包并卸载</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep -i mysql</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/3.png"></p>
-<p>卸载</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum remove mysql-community-libs-5.7.29-1.el7.x86_64</span><br><span class="line"></span><br><span class="line">mysql-community-common-5.7.29-1.el7.x86_64 mysql-community-client-5.7.29-1.el7.x86_64 mysql-community-server-5.7.29-1.el7.x86_64</span><br></pre></td></tr></table></figure>
-
-<p>(4)查找mysql相关目录 删除</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find / -name mysql</span><br><span class="line"></span><br><span class="line">rm -rf /var/lib/mysql</span><br><span class="line">rm -rf /var/lib/mysql/mysql</span><br><span class="line">rm -rf /usr/share/mysql</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/4.png"></p>
-<h2 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h2><p>(1) 在<code>/export/server/</code>目录下创建mysql目录，并上传MySQL压缩包</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /export/server/mysql </span><br><span class="line"></span><br><span class="line">sudo rz</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/5.png"></p>
-<p>(2) 解压<code>mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar</code> 到上述文件夹</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xvf mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/6.png"> </p>
-<p>(3) 执行安装</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install libaio</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/7.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh </span><br><span class="line"></span><br><span class="line">mysql-community-common-5.7.29-1.el7.x86_64.rpm mysql-community-libs-5.7.29-1.el7.x86_64.rpm mysql-community-client-5.7.29-1.el7.x86_64.rpm mysql-community-server-5.7.29-1.el7.x86_64.rpm</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/8.png"></p>
-<p>(5)MySQL初始化</p>
-<p>&lt;1&gt;初始化</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld --initialize</span><br></pre></td></tr></table></figure>
-
-<p>&lt;2&gt; 更改所属组</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown mysql:mysql /var/lib/mysql -R</span><br></pre></td></tr></table></figure>
-
-<p>&lt;3&gt;启动mysql</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld.service</span><br></pre></td></tr></table></figure>
-
-<p>&lt;4&gt;查看生成的临时root密码</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat  /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/9.png"></p>
-<p>(6)登录MySQL</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
-
-<p>这里输入在日志中生成的密码</p>
-<p>(7)更新root密码，设置为hadoop</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter user user() identified by &quot;hadoop&quot;;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/10.png"></p>
-<p>(8)授权</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;hadoop&#x27; WITH GRANT OPTION;</span><br><span class="line"></span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hive安装"><a href="#Hive安装" class="headerlink" title="Hive安装"></a>Hive安装</h2><p>(1)上传压缩包 解压 设置软链接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf apache-hive-3.1.2-bin.tar.gz</span><br><span class="line"></span><br><span class="line">ln -s apache-hive-3.1.2-bin hive</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/11.png"></p>
-<p> <img src="/../image_1/12.png"></p>
-<p>(2)处理hive与Hadoop之间guava版本的差异</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/hive/</span><br><span class="line"></span><br><span class="line">rm -rf lib/guava-19.0.jar</span><br><span class="line"></span><br><span class="line">cp /export/server/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar ./lib/</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/13.png"></p>
-<p>(3)修改配置文件</p>
-<p>Hive-env.sh</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/hive/conf</span><br><span class="line"></span><br><span class="line">mv hive-env.sh.template hive-env.sh</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim hive-env.sh</span><br><span class="line"></span><br><span class="line">export HADOOP_HOME=/export/server/hadoop</span><br><span class="line">export HIVE_CONF_DIR=/export/server/hive/conf</span><br><span class="line">export HIVE_AUX_JARS_PATH=/export/server/hive/lib</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/14.png"></p>
-<p>Hive-site.xml</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;!-- 存储元数据mysql相关配置 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;jdbc:mysql://node1:3306/hive3?createDatabaseIfNotExist=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;root&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hadoop&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- H2S运行绑定host --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.server2.thrift.bind.host&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;node1&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 远程模式部署metastore metastore地址 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.metastore.uris&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;thrift://node1:9083&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 关闭元数据存储授权  --&gt; </span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.metastore.event.db.notification.api.auth&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/15.png"></p>
-<p>(4)上传mysql jdbc驱动到hive&#x2F;lib目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql-connector-java-5.1.32.jar</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/16.png"></p>
-<p>(5)在hdfs创建hive储存目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -mkdir /tmp</span><br><span class="line">hadoop fs -mkdir -p /user/hive/warehouse</span><br><span class="line">hadoop fs -chmod g+w /tmp</span><br><span class="line">hadoop fs -chmod g+w /user/hive/warehouse</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hive启动"><a href="#Hive启动" class="headerlink" title="Hive启动"></a>Hive启动</h2><p>(1)启动metastore服务</p>
-<p>&lt;1&gt; 前台启动  关闭ctrl+c</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/server/hive/bin/hive --service metastore</span><br></pre></td></tr></table></figure>
-
-<p>&lt;2&gt; 前台启动开启debug日志</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/server/hive/bin/hive --service metastore --hiveconf </span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive.root.logger=DEBUG,console  </span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/17.png"></p>
-<p><img src="/../image_1/18.png"></p>
-<p>&lt;3&gt; 后台启动 进程挂起  关闭使用jps+ kill -9</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup /export/server/hive/bin/hive --service metastore &amp;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_1/19.png"></p>
-<p>(2)启动hiveserver2服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup /export/server/hive/bin/hive --service hiveserver2 &amp;</span><br></pre></td></tr></table></figure>
-
-<p>【注】启动hiveserver2后，等待一段时间后再启动beeline连接，否则可能会连接不上</p>
-<p>(3)Beeline客户端连接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/export/server/hive/bin/beeline</span><br><span class="line"></span><br><span class="line">beeline&gt; ! connect jdbc:hive2://node1:10000</span><br><span class="line">beeline&gt; root</span><br><span class="line">beeline&gt; 直接回车</span><br></pre></td></tr></table></figure>
-
-<p>【注】启动hive之前先jps检查hdfs集群是否则正常运行，否则会连接错误。</p>
-<p><img src="/../image_1/20.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Hive/" data-id="clio563kg0001qsubfdsoezov" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Spark(Pyspark基础编码环境)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/">Spark(pyspark基础编码环境)配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Spark（Pyspark基础编码环境）"><a href="#Spark（Pyspark基础编码环境）" class="headerlink" title="Spark（Pyspark基础编码环境）"></a>Spark（Pyspark基础编码环境）</h1><h2 id="PySpark"><a href="#PySpark" class="headerlink" title="PySpark"></a>PySpark</h2><h4 id="什么是PySpark"><a href="#什么是PySpark" class="headerlink" title="什么是PySpark"></a>什么是PySpark</h4><p>PySpark是Spar官方提供的一个Python类库，内置了完全的Spark API，可以通过PySpark类库来编写Spark应用程序，并将其提交到Spark集群中运行。</p>
-<h4 id="本机PySpark环境配置"><a href="#本机PySpark环境配置" class="headerlink" title="本机PySpark环境配置"></a>本机PySpark环境配置</h4><p>（1）将课程资料中提供的:<code>hadoop-3.3.0</code>文件，复制到一个地方，比如我的放在<code>D:\虚拟机\ahadoop\hadoop_windows\hadoop-3.3.0</code>目录下</p>
-<p>（2）将文件夹内<code>bin</code>内的<code>hadoop.dll</code>复制到:<code>C:\Windows\System32</code>里面去</p>
-<p><img src="/../image_8/1.png"></p>
-<p>（3） 配置HADOOP_HOME环境变量指向 hadoop-3.3.0文件夹的路径</p>
-<p><img src="/../image_8/2.png"></p>
-<h3 id="Anaconda的安装"><a href="#Anaconda的安装" class="headerlink" title="Anaconda的安装"></a>Anaconda的安装</h3><p>（1）打开资料中提供的:<code>Anaconda3-2021.05-Windows-x86_64.exe</code>文件</p>
-<p>打开后点击Next</p>
-<p><img src="/../image_8/3.png"></p>
-<p>点击I Agree</p>
-<p><img src="/../image_8/4.png"></p>
-<p>点击Next</p>
-<p><img src="/../image_8/5.png"></p>
-<p>如果想要修改安装路径，可以修改，修改完点击Next</p>
-<p><img src="/../image_8/6.png"></p>
-<p>不勾选，点击Install </p>
-<p><img src="/../image_8/7.png"></p>
-<p>Finish完成安装</p>
-<p>（2）去官网下载[<a target="_blank" rel="noopener" href="https://www.anaconda.com/products/individual#Downloads]">https://www.anaconda.com/products/individual#Downloads]</a></p>
-<p>下载完之后，安装步骤参考（1）</p>
-<p>（3）配置国内源</p>
-<p>Anaconda默认源服务器在国外，网速比较慢, 配置国内源加速网络下载。打开Anaconda Prompt程序，执行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-
-<p>然后用记事本打开：</p>
-<p><code>C:\Users\用户名\.condarc</code>文件，将如下内容替换进文件内，保存即可：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_8/8.png"></p>
-<p>创建虚拟环境</p>
-<p><img src="/../image_8/9.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 创建虚拟环境 pyspark, 基于Python 3.8</span><br><span class="line">conda create -n pyspark python=3.8</span><br><span class="line"></span><br><span class="line"># 切换到虚拟环境内</span><br><span class="line">conda activate pyspark</span><br><span class="line"></span><br><span class="line"># 在虚拟环境内安装包</span><br><span class="line">pip install pyhive pyspark jieba -i https://pypi.tuna.tsinghua.edu.cn/simple </span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_8/10.png"></p>
-<p>注：之前都已完成，就不在执行了。</p>
-<h3 id="PySpark安装"><a href="#PySpark安装" class="headerlink" title="PySpark安装"></a>PySpark安装</h3><p>PySpark是Python标准类库，可以通过Python自带的pip程序进行安装或者Anaconda的库安装(conda)，在合适的虚拟环境下(课程使用pyspark这个虚拟环境)，执行如下命令即可安装：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyspark -i https://pypi.tuna.tsinghua.edu.cn/simple或者conda install pyspark</span><br></pre></td></tr></table></figure>
-
-<h2 id="PyCharm配置Python解释器"><a href="#PyCharm配置Python解释器" class="headerlink" title="PyCharm配置Python解释器"></a>PyCharm配置Python解释器</h2><h3 id="配置本地解释器"><a href="#配置本地解释器" class="headerlink" title="配置本地解释器"></a>配置本地解释器</h3><p><img src="/../image_8/11.png"></p>
-<h3 id="配置远程SSH-Linux解释器"><a href="#配置远程SSH-Linux解释器" class="headerlink" title="配置远程SSH Linux解释器"></a>配置远程SSH Linux解释器</h3><p>（1）设置远程SSH python pySpark 环境 </p>
-<p><img src="/../image_8/12.png"></p>
-<p><img src="/../image_8/13.png"></p>
-<p>（2）添加新的远程连接</p>
-<p><img src="/../image_8/14.png"></p>
-<p><img src="/../image_8/15.png"></p>
-<p>（3）设置虚拟机Python环境路径</p>
-<p><img src="/../image_8/16.png"></p>
-<p><img src="/../image_8/17.png"></p>
-<h3 id="WordCount代码实战"><a href="#WordCount代码实战" class="headerlink" title="WordCount代码实战"></a>WordCount代码实战</h3><h4 id="远程连接Linux系统执行程序"><a href="#远程连接Linux系统执行程序" class="headerlink" title="远程连接Linux系统执行程序"></a>远程连接Linux系统执行程序</h4><p>（1）本地准备文件word.txt</p>
-<p><img src="/../image_8/18.png"></p>
-<p>（2）切换到远程SSH 解释器执行(在Linux系统上执行)</p>
-<p><img src="/../image_8/19.png"></p>
-<p>刚开始安装的是pyspark版本3.4.0，课程要求，需要修改为3.2.0。在node2中执行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda activate pyspark</span><br><span class="line"></span><br><span class="line">pip uninstall pyspark</span><br><span class="line"></span><br><span class="line">pip install pyspark==3.2.0 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_8/20.png"></p>
-<p><img src="/../image_8/21.png"></p>
-<p>（3）执行结果如下： </p>
-<p><img src="/../image_8/22.png"></p>
-<h4 id="HDFS执行程序"><a href="#HDFS执行程序" class="headerlink" title="HDFS执行程序"></a>HDFS执行程序</h4><p>（1）上传数据到HDFS中：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -put word.txt /input/words.txt</span><br><span class="line">hadoop fs -ls /input</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_8/23.png"></p>
-<p>（2）在Hadoop集群上运行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 读取文件</span><br><span class="line">  file_rdd = sc.textFile(&quot;hdfs://node1:8020/input/words.txt&quot;)</span><br></pre></td></tr></table></figure>
-
-<p>（3）执行结果如下：</p>
-<p><img src="/../image_8/24.png"></p>
-<h4 id="本地执行程序"><a href="#本地执行程序" class="headerlink" title="本地执行程序"></a>本地执行程序</h4><p>（1）读取本地文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 读取文件</span><br><span class="line">file_rdd = sc.textFile(&quot;C:\\Users\\20538\\PycharmProjects\\Spark\\data\\input\\words.txt&quot;)</span><br></pre></td></tr></table></figure>
-
-<p>（2）执行效果图：</p>
-<p><img src="/../image_8/25.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/" data-id="clio563ki0002qsub52kp8s8p" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clj264d7y0000boubezpbdgbh" class="article-share-link">
         Share
       </a>
       
@@ -682,265 +1361,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Git/" data-id="clio563kj0003qsub17jt2nrs" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Spark(HA)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Spark(HA)/">Spark(HA)环境配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Spark(HA)/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Spark（HA）"><a href="#Spark（HA）" class="headerlink" title="Spark（HA）"></a>Spark（HA）</h1><h2 id="Spark-StandAlone-HA-环境搭建"><a href="#Spark-StandAlone-HA-环境搭建" class="headerlink" title="Spark StandAlone HA 环境搭建"></a>Spark StandAlone HA 环境搭建</h2><p>启动Zookeeper服务和HDFS集群</p>
-<p><img src="/../image_6/1.png"></p>
-<p><code>cd /export/server/spark/conf </code>中<code>vi spark-env.sh </code>将其中的<code>SPARK_MASTER_HOST=node1</code>删除，并增加如下信息，以达到可以用到zookeeper的动态切换master功能</p>
-<p><img src="/../image_6/2.png"></p>
-<p>通过命令<code>scp spark-env.sh node2:/export/server/spark/conf/</code></p>
-<p><code>scp spark-env.sh node3:/export/server/spark/conf/</code>将<code>spark-env.sh</code>分发到node2和node3上，且若是StandAlone集群是启动中的话，通过<code>sbin/stop-all.sh</code>命令将StandAlone集群停止</p>
-<p>在node1上启动一个master进程和全部的worker进程</p>
-<p><img src="/../image_6/3.png"></p>
-<p><img src="/../image_6/4.png"></p>
-<p>在node2上启动一个备用的master进程</p>
-<p><img src="/../image_6/5.png"></p>
-<p><img src="/../image_6/6.png"></p>
-<p>使用<code>bin/spark-submit --master spark://node1:7077 /export/server/spark/examples/src/main/python/pi.py 1000</code>命令提交一个spark任务到正在运行的master上，在完成提交后使用命令kill掉node1上的master进程，并等待node2上的备用的master进程来接收并完成这个spark任务。</p>
-<p><img src="/../image_6/7.png"></p>
-<p><img src="/../image_6/8.png"></p>
-<p>测试</p>
-<p><img src="/../image_6/9.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(HA)/" data-id="clio563kj0004qsub7mpq4kza" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Spark(stand-alone)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Spark(stand-alone)/">Spark(stand-alone)环境配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Spark(stand-alone)/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Spark（stand-alone）"><a href="#Spark（stand-alone）" class="headerlink" title="Spark（stand-alone）"></a>Spark（stand-alone）</h1><h2 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h2><p>1)集群规划</p>
-<p>课程中使用三台Linux虚拟机来组成集群环境，分别是:</p>
-<p>node1\ node2\ node3</p>
-<p>node1运行: Spark的Master进程  和 1个Worker进程</p>
-<p>node2运行: spark的1个worker进程</p>
-<p>node3运行: spark的1个worker进程</p>
-<p>整个集群提供: 1个master进程 和 3个worker进程</p>
-<p>2)安装Anaconda</p>
-<p>我已经安装完成就不在此安装了如图</p>
-<p> <img src="/../image_5/1.png"></p>
-<p>3)配置workers文件</p>
-<p>在<code>/export/server/spark/conf</code>目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 改名，去掉后面的.template后缀</span><br><span class="line">mv workers.template workers</span><br><span class="line"></span><br><span class="line"># 编辑worker文件</span><br><span class="line">vim workers</span><br><span class="line"># 将里面的localhost删除, 追加</span><br><span class="line">node1</span><br><span class="line">node2</span><br><span class="line">node3</span><br><span class="line">到workers文件内</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_5/2.png"> </p>
-<p>4)配置spark-env.sh文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># 1. 改名</span><br><span class="line">mv spark-env.sh.template spark-env.sh</span><br><span class="line"></span><br><span class="line"># 2. 编辑spark-env.sh, 在底部追加如下内容</span><br><span class="line"></span><br><span class="line">## 设置JAVA安装目录</span><br><span class="line">JAVA_HOME=/export/server/jdk</span><br><span class="line"></span><br><span class="line">## HADOOP软件配置文件目录，读取HDFS上文件和运行YARN集群</span><br><span class="line">HADOOP_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line">YARN_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line"></span><br><span class="line">## 指定spark老大Master的IP和提交任务的通信端口</span><br><span class="line"># 告知Spark的master运行在哪个机器上</span><br><span class="line">export SPARK_MASTER_HOST=node1</span><br><span class="line"># 告知sparkmaster的通讯端口</span><br><span class="line">export SPARK_MASTER_PORT=7077</span><br><span class="line"># 告知spark master的 webui端口</span><br><span class="line">SPARK_MASTER_WEBUI_PORT=8080</span><br><span class="line"></span><br><span class="line"># worker cpu可用核数</span><br><span class="line">SPARK_WORKER_CORES=1</span><br><span class="line"># worker可用内存</span><br><span class="line">SPARK_WORKER_MEMORY=1g</span><br><span class="line"># worker的工作通讯地址</span><br><span class="line">SPARK_WORKER_PORT=7078</span><br><span class="line"># worker的 webui地址</span><br><span class="line">SPARK_WORKER_WEBUI_PORT=8081</span><br><span class="line"></span><br><span class="line">## 设置历史服务器</span><br><span class="line"># 配置的意思是  将spark程序运行的历史日志 存到hdfs的/sparklog文件夹中</span><br><span class="line">SPARK_HISTORY_OPTS=&quot;-Dspark.history.fs.logDirectory=hdfs://node1:8020/sparklog/ -Dspark.history.fs.cleaner.enabled=true&quot;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_5/3.png"></p>
-<p>5)在HDFS上创建程序运行历史记录存放的文件夹</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -mkdir /sparklog</span><br><span class="line">hadoop fs -chmod 777 /sparklog</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_5/4.png"></p>
-<p>6)配置spark-defaults.conf文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 1. 改名</span><br><span class="line">mv spark-defaults.conf.template spark-defaults.conf</span><br><span class="line"></span><br><span class="line"># 2. 修改内容, 追加如下内容</span><br><span class="line"># 开启spark的日期记录功能</span><br><span class="line">spark.eventLog.enabled   true</span><br><span class="line"># 设置spark日志记录的路径</span><br><span class="line">spark.eventLog.dir   hdfs://node1:8020/sparklog/ </span><br><span class="line"># 设置spark日志是否启动压缩</span><br><span class="line">spark.eventLog.compress   true</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_5/5.png"> </p>
-<p>7)将Spark安装文件夹，分发到node1,node2上</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r spark-3.1.2-bin-hadoop3.2 node2:/export/server/</span><br><span class="line">scp -r spark-3.1.2-bin-hadoop3.2 node3:/export/server/</span><br></pre></td></tr></table></figure>
-
-<p>增加软连接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/spark-3.1.2-bin-hadoop3.2 /export/server/spark</span><br></pre></td></tr></table></figure>
-
-<p>8)启动历史服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sbin/start-history-server.sh</span><br></pre></td></tr></table></figure>
-
-<p>9)启动Spark的Master和worker进程</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 启动全部master和worker</span><br><span class="line">sbin/start-all.sh</span><br></pre></td></tr></table></figure>
-
-<p>10)查看Master的WEB UI</p>
-<p><img src="/../image_5/6.png"> </p>
-<h2 id="连接到StandAlone集群"><a href="#连接到StandAlone集群" class="headerlink" title="连接到StandAlone集群"></a>连接到StandAlone集群</h2><h3 id="bin-x2F-spark"><a href="#bin-x2F-spark" class="headerlink" title="bin&#x2F;spark"></a>bin&#x2F;spark</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/pyspark --master spark://node1:7077</span><br><span class="line"># 通过--master选项来连接到 StandAlone集群</span><br><span class="line"># 如果不写--master选项, 默认是local模式运行</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_5/7.png"> </p>
-<h3 id="bin-x2F-spark-shell"><a href="#bin-x2F-spark-shell" class="headerlink" title="bin&#x2F;spark-shell"></a>bin&#x2F;spark-shell</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-shell --master spark://node1:7077</span><br><span class="line"># 同样适用--master来连接到集群使用</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 测试代码</span><br><span class="line">sc.parallelize(Array(1,2,3,4,5)).map(x=&gt; x + 1).collect()</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_5/8.png"> </p>
-<h3 id="bin-x2F-spark-submit-PI"><a href="#bin-x2F-spark-submit-PI" class="headerlink" title="bin&#x2F;spark-submit(PI)"></a>bin&#x2F;spark-submit(PI)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-submit--masterspark://node1:7077/export/server/spark/examples/src/main/python/pi.py 100# 同样使用--master来指定将任务提交到集群运行</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_5/9.png"> </p>
-<h2 id="查看历史服务器WEB-UI"><a href="#查看历史服务器WEB-UI" class="headerlink" title="查看历史服务器WEB UI"></a>查看历史服务器WEB UI</h2><p>浏览器打开：<code>node1:18080</code></p>
-<p><img src="/../image_5/10.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(stand-alone)/" data-id="clio563kk0006qsubdw6h05i9" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Spark(local)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Spark(local)/">Spark(local)环境配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Spark(local)/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Spark（local）"><a href="#Spark（local）" class="headerlink" title="Spark（local）"></a>Spark（local）</h1><h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>在<code>/etc/profile</code>中配置环境变量</p>
-<p><img src="/../image_4/1.png"></p>
-<p>最好在<code>/root/.bashrc</code>中同样也进行环境变量配置</p>
-<h2 id="安装spark"><a href="#安装spark" class="headerlink" title="安装spark"></a>安装spark</h2><p>1)把我们下载好的压缩包放在<code>/export/server/</code>路径下</p>
-<p>2)解压到当前目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf spark-3.2.0-bin-hadoop3.2.tgz -C /export/server/</span><br></pre></td></tr></table></figure>
-
-<p>3)给spark配置一个软链接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_4/2.png"></p>
-<h2 id="测试Spark"><a href="#测试Spark" class="headerlink" title="测试Spark"></a>测试Spark</h2><p>1)<code>bin/pyspark</code></p>
-<p>2)<code>bin/pyspark</code> 程序，可以提供一个交互式的 Python解释器环境，在这里面可以写普通python代码，以及spark代码.提交一个程序测试</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc.parallelize([1,2,3,4,5]).map(lambda x: x + 1).collect()</span><br></pre></td></tr></table></figure>
-
-<p>查看结果</p>
-<p><img src="/../image_4/3.png"></p>
-<p>3)当Spark程序运行时会绑定到4040端口上，是一个WEBUI端口</p>
-<p><img src="/../image_4/4.png"></p>
-<p>打开监控页面后，可以发现在程序内仅有一个Driver因为我们是Local模式，Driver即管理又干活，同时，输入jps</p>
-<p><img src="/../image_4/5.png"></p>
-<p>可以看到local模式下的唯一进程存在这个进程即是master也是worker</p>
-<p>4)bin&#x2F;spark-shell了解</p>
-<p>同样是一个解释器环境, 和<code>bin/pyspark</code>不同的是, 这个解释器环境 运行的不是python代码, 而是scala程序代码</p>
-<p><img src="/../image_4/6.png"></p>
-<p>5)bin&#x2F;spark-submit(PI)</p>
-<p>bin&#x2F;spark-submit的作用是提交指定的Spark代码到Spark环境中运行</p>
-<p>示例：bin&#x2F;spark-submit </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/server/spark/examples/src/main/python/pi.py 10</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_4/7.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(local)/" data-id="clio563kl0007qsubfv837ttx" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Git/" data-id="clj264d850003boub9xuacrah" class="article-share-link">
         Share
       </a>
       
@@ -957,6 +1378,10 @@
   </article>
   
 
+  
+  <nav class="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next</a>
+  </nav>
   
 </section>
 </div>

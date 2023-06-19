@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    Flume(2) |
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-Flume(2)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h1 class="article-title" itemprop="name">
+    Flume(2)
+  </h1>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(2)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <h1 id="Flume（2）"><a href="#Flume（2）" class="headerlink" title="Flume（2）"></a>Flume（2）</h1><h2 id="配置自定义拦截器"><a href="#配置自定义拦截器" class="headerlink" title="配置自定义拦截器"></a>配置自定义拦截器</h2><p>（1）将自定义拦截器打包成jar包上传到Flume安装目录下lib目录</p>
+<p>（2）在node1和node2上配置上游案例文件在conf目录下创建<code>example9-1-taildir-f-avro-interceptor.conf</code>在node3上配置下游案例文件创建<code>example9-2-avro-f-hdfs-interceptor.conf</code></p>
+<p> <img src="/../image_2-2/1.png"></p>
+<p> <img src="/../image_2-2/2.png"> </p>
+<p>（3）启动下游node3上的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-2-avro-f-hdfs-interceptor.</span><br><span class="line">conf -Dflume.root.logger=DEBUG,console</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/../image_2-2/3.png"> </p>
+<p>（4）启动上有的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-1-taildir-f-avro-int</span><br><span class="line">erceptor.conf 1&gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>（5）去hdfs上查看是否上传成功</p>
+<p><img src="/../image_2-2/4.png"> </p>
+<h2 id="Replicating-Channel-Selector选择器的配置"><a href="#Replicating-Channel-Selector选择器的配置" class="headerlink" title="Replicating Channel Selector选择器的配置"></a>Replicating Channel Selector选择器的配置</h2><p>（1）在node1上配置<code>example10-channel-replicating.conf</code></p>
+<p> <img src="/../image_2-2/5.png"> </p>
+<p>（2）启动</p>
+<p> <img src="/../image_2-2/6.png"> </p>
+<h2 id="Multiplexing-Channel-Selector配置"><a href="#Multiplexing-Channel-Selector配置" class="headerlink" title="Multiplexing Channel Selector配置"></a>Multiplexing Channel Selector配置</h2><p>（1）在myconf中在配置<code>example11-channel-Multiplexing.conf</code></p>
+<p> <img src="/../image_2-2/7.png"> </p>
+<p>（2）启动一下agent</p>
+<p> <img src="/../image_2-2/8.png"> </p>
+<p>这里通过事件的header值来判断将事件发送到哪个channel，还可以配合拦截器一起使用</p>
+<h2 id="Failover-Sink-Processor处理器的配置和使用"><a href="#Failover-Sink-Processor处理器的配置和使用" class="headerlink" title="Failover Sink Processor处理器的配置和使用"></a>Failover Sink Processor处理器的配置和使用</h2><p>（1）在上游node1上配置<code>example12-1-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/9.png"> </p>
+<p>（2）在node2node3上配置下游文件<code>example12-2-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/10.png"> </p>
+<p>（1）一组中只有优先级高的那个sink在工作，另一个是等待中</p>
+<p>（2）如果高优先级的sink发送数据失败，则专用低优先级的sink去工作，并且，在配置时间penalty之后，还会尝试用高优先级的去发送数据。</p>
+<p>（3）故障转移处理器维护了一个带有优先级的sink列表，故障转移机制将失败的sink放入到一个冷却池中，如果sink成功发送了事件，将其放入到活跃池中，sink可以设置优先级，数字越高，优先级越高，如果一个sink发送事件失败，下一个有更高优先级的sink将被用来发送事件，比如，优先级100的比优先级80的先被使用，如果没有设置优先级，按配置文件中配置的顺序决定。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(2)/" data-id="clj264d830001boubf8gd9hh1" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  <a href="/2023/06/19/Kafka/" class="article-nav-link">
+    <strong class="article-nav-caption">Newer</strong>
+    <div class="article-nav-title">
+      
+      Kafka
+      
+    </div>
+  </a>
+  
+  
+  <a href="/2023/06/19/Flume(1)/" class="article-nav-link">
+    <strong class="article-nav-caption">Older</strong>
+    <div class="article-nav-title">Flume(1)</div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2023</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul></p>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>

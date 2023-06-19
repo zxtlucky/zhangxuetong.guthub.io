@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    Flume(3) |
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-Flume(3)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h1 class="article-title" itemprop="name">
+    Flume(3)
+  </h1>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(3)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.298Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <h1 id="Flume（3）"><a href="#Flume（3）" class="headerlink" title="Flume（3）"></a>Flume（3）</h1><h2 id="Flume-综合实战案例"><a href="#Flume-综合实战案例" class="headerlink" title="Flume 综合实战案例"></a>Flume 综合实战案例</h2><h3 id="案例场景"><a href="#案例场景" class="headerlink" title="案例场景"></a>案例场景</h3><p>A、B、C等日志服务机器实时生产日志，日志的内容分为多种类型：</p>
+<p>APP端用户行为日志、微信小程序端用户行为日志、PC端用户行为日志</p>
+<p>需求：</p>
+<p>把日志服务器中的各类日志数据采集汇总到一个中转agent上，然后分类写入hdfs中。</p>
+<p>在hdfs中要求的目录为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/source/logs/app_log/20160101/</span><br><span class="line">/source/logs/wxapp_log/20160101/</span><br><span class="line">/source/logs/pcweb_log/20160101/</span><br></pre></td></tr></table></figure>
+
+<p>linux命令操作替换jar包中的文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">显示jar中的文件列表：  jar -tvf xx.jar</span><br><span class="line">解压jar中的指定文件：  jar -xvf xx.jar yy.properties</span><br><span class="line">更新jar中的指定文件：  jar -uvf xx.jar yy.properties</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 每台日志服务器上部署一个flume agent --&gt;上游，每个agent配置2个source对应2类数据</span><br><span class="line">2. 上游的agent在采集数据时，添加一个header，指定数据的类别</span><br><span class="line">3. 上游的agent要配置两个avro sink，各自对接一个下级的agent</span><br><span class="line">4. 上游还要配置sink processor，fail over sink processor，控制两个sink中只有一个avro sink在工作，如果失败再切换到另一个avro sink</span><br><span class="line">5. 上游还要配置字段加密拦截器</span><br><span class="line">6. 下游配置两个flume agent，使用avro source接收数据</span><br><span class="line">7. 下游的hdfs sink，目录配置使用动态通配符，取到event中的类别header，以便于将不同类别数据写入不同hdfs目录 </span><br></pre></td></tr></table></figure>
+
+<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><h4 id="部署行为日志生产模拟器"><a href="#部署行为日志生产模拟器" class="headerlink" title="部署行为日志生产模拟器"></a>部署行为日志生产模拟器</h4><p>准备一个mysql服务器，并创建一个库：realtimedw</p>
+<p><img src="/../image_3-2/1.png"></p>
+<p>将realtimedw.sql这个脚本，导入到realtimedw库中</p>
+<p><img src="/../image_3-2/2.png"></p>
+<p>将t_md_areas.sql这个脚本，导入到realtimedw库中</p>
+<p><img src="/../image_3-2/3.png"></p>
+<p>准备其他数据文件目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/data/flume-example-data/loginit</span><br></pre></td></tr></table></figure>
+
+<p>修改jar包中的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">log_gen_app.jar包中的配置文件修改</span><br><span class="line">other.properties、log4j.properties</span><br><span class="line"></span><br><span class="line">log_gen_wx.jar包中的配置文件修改</span><br><span class="line">other.properties、log4j.properties</span><br></pre></td></tr></table></figure>
+
+<p>上传jar包，执行启动命令</p>
+<p>在<code>/export/data/flume-example-data/loginit </code>中添加shell文件用以启动日志生成器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim genapplog.sh</span><br><span class="line">java -Xss102400k -cp log_gen_app.jar cn.doitedu.loggen.entry.GenAppLog 1 &gt; /dev/null 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br><span class="line">vim genwxlog.sh</span><br><span class="line">java -Xss102400k -cp log_gen_wx.jar cn.doitedu.loggen.entry.GenWxAppLog 1 &gt; /dev/null 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br><span class="line">sh genapplog.sh</span><br><span class="line">sh genwxlog.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动测试"><a href="#启动测试" class="headerlink" title="启动测试"></a>启动测试</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.先把自定义拦截器代码jar包放入上游（node1）flume的lib目录中；</span><br><span class="line">2.将各台机器上之前的一些checkpoint、缓存等目录清除；</span><br><span class="line">3.启动下游的两个agent（node2、node3上）；</span><br><span class="line">4.在上游的机器上，创建日志数据目录，并写脚本模拟往3类日志中写入日志：</span><br><span class="line">5.在上游的所有机器上启动flume agent</span><br><span class="line">6.到hdfs上观察结果</span><br><span class="line">7.尝试kill掉下游node2的 agent，看是否能够故障切换</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行截图"><a href="#运行截图" class="headerlink" title="运行截图"></a>运行截图</h4><p><img src="/../image_3-2/4.png"></p>
+<p><img src="/../image_3-2/5.png"></p>
+<p><img src="/../image_3-2/6.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(3)/" data-id="clj264d850004boubagrj0m57" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  <a href="/2023/06/19/Sqoop(2)/" class="article-nav-link">
+    <strong class="article-nav-caption">Newer</strong>
+    <div class="article-nav-title">
+      
+      Sqoop(2)
+      
+    </div>
+  </a>
+  
+  
+  <a href="/2023/06/19/Kafka/" class="article-nav-link">
+    <strong class="article-nav-caption">Older</strong>
+    <div class="article-nav-title">Kafka</div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2023</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul></p>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>
