@@ -148,7 +148,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Git/" data-id="clja2gf5n0003dwuberra3615" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Git/" data-id="clja2jlfc0002koubdn9473oz" class="article-share-link">
         Share
       </a>
       
@@ -311,7 +311,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Hive/" data-id="clja2gf5o0005dwubdlfsbo0a" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Hive/" data-id="clja2jlfe0004koub0gtr9z5s" class="article-share-link">
         Share
       </a>
       
@@ -380,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(HA)/" data-id="clja2gf5r0008dwubbxsgbpl7" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(HA)/" data-id="clja2jlfg0006koub9x7a4iv4" class="article-share-link">
         Share
       </a>
       
@@ -505,7 +505,90 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/" data-id="clja2gf5r0009dwub36h9e26i" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(Pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83)/" data-id="clja2jlfh0008koubdj7gbi1j" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Spark(local)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/09/Spark(local)/">Spark(local)环境配置</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/09/Spark(local)/" class="article-date">
+  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Spark（local）"><a href="#Spark（local）" class="headerlink" title="Spark（local）"></a>Spark（local）</h1><h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>在<code>/etc/profile</code>中配置环境变量</p>
+<p><img src="/../image_4/1.png"></p>
+<p>最好在<code>/root/.bashrc</code>中同样也进行环境变量配置</p>
+<h2 id="安装spark"><a href="#安装spark" class="headerlink" title="安装spark"></a>安装spark</h2><p>1)把我们下载好的压缩包放在<code>/export/server/</code>路径下</p>
+<p>2)解压到当前目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf spark-3.2.0-bin-hadoop3.2.tgz -C /export/server/</span><br></pre></td></tr></table></figure>
+
+<p>3)给spark配置一个软链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_4/2.png"></p>
+<h2 id="测试Spark"><a href="#测试Spark" class="headerlink" title="测试Spark"></a>测试Spark</h2><p>1)<code>bin/pyspark</code></p>
+<p>2)<code>bin/pyspark</code> 程序，可以提供一个交互式的 Python解释器环境，在这里面可以写普通python代码，以及spark代码.提交一个程序测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc.parallelize([1,2,3,4,5]).map(lambda x: x + 1).collect()</span><br></pre></td></tr></table></figure>
+
+<p>查看结果</p>
+<p><img src="/../image_4/3.png"></p>
+<p>3)当Spark程序运行时会绑定到4040端口上，是一个WEBUI端口</p>
+<p><img src="/../image_4/4.png"></p>
+<p>打开监控页面后，可以发现在程序内仅有一个Driver因为我们是Local模式，Driver即管理又干活，同时，输入jps</p>
+<p><img src="/../image_4/5.png"></p>
+<p>可以看到local模式下的唯一进程存在这个进程即是master也是worker</p>
+<p>4)bin&#x2F;spark-shell了解</p>
+<p>同样是一个解释器环境, 和<code>bin/pyspark</code>不同的是, 这个解释器环境 运行的不是python代码, 而是scala程序代码</p>
+<p><img src="/../image_4/6.png"></p>
+<p>5)bin&#x2F;spark-submit(PI)</p>
+<p>bin&#x2F;spark-submit的作用是提交指定的Spark代码到Spark环境中运行</p>
+<p>示例：bin&#x2F;spark-submit </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/server/spark/examples/src/main/python/pi.py 10</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_4/7.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/09/Spark(local)/" data-id="clja2jlfl000bkoub1k6jbcp1" class="article-share-link">
         Share
       </a>
       
@@ -611,90 +694,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(stand-alone)/" data-id="clja2gf5t000bdwubf0sd3sj9" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Spark(local)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Spark(local)/">Spark(local)环境配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Spark(local)/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Spark（local）"><a href="#Spark（local）" class="headerlink" title="Spark（local）"></a>Spark（local）</h1><h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>在<code>/etc/profile</code>中配置环境变量</p>
-<p><img src="/../image_4/1.png"></p>
-<p>最好在<code>/root/.bashrc</code>中同样也进行环境变量配置</p>
-<h2 id="安装spark"><a href="#安装spark" class="headerlink" title="安装spark"></a>安装spark</h2><p>1)把我们下载好的压缩包放在<code>/export/server/</code>路径下</p>
-<p>2)解压到当前目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf spark-3.2.0-bin-hadoop3.2.tgz -C /export/server/</span><br></pre></td></tr></table></figure>
-
-<p>3)给spark配置一个软链接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_4/2.png"></p>
-<h2 id="测试Spark"><a href="#测试Spark" class="headerlink" title="测试Spark"></a>测试Spark</h2><p>1)<code>bin/pyspark</code></p>
-<p>2)<code>bin/pyspark</code> 程序，可以提供一个交互式的 Python解释器环境，在这里面可以写普通python代码，以及spark代码.提交一个程序测试</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc.parallelize([1,2,3,4,5]).map(lambda x: x + 1).collect()</span><br></pre></td></tr></table></figure>
-
-<p>查看结果</p>
-<p><img src="/../image_4/3.png"></p>
-<p>3)当Spark程序运行时会绑定到4040端口上，是一个WEBUI端口</p>
-<p><img src="/../image_4/4.png"></p>
-<p>打开监控页面后，可以发现在程序内仅有一个Driver因为我们是Local模式，Driver即管理又干活，同时，输入jps</p>
-<p><img src="/../image_4/5.png"></p>
-<p>可以看到local模式下的唯一进程存在这个进程即是master也是worker</p>
-<p>4)bin&#x2F;spark-shell了解</p>
-<p>同样是一个解释器环境, 和<code>bin/pyspark</code>不同的是, 这个解释器环境 运行的不是python代码, 而是scala程序代码</p>
-<p><img src="/../image_4/6.png"></p>
-<p>5)bin&#x2F;spark-submit(PI)</p>
-<p>bin&#x2F;spark-submit的作用是提交指定的Spark代码到Spark环境中运行</p>
-<p>示例：bin&#x2F;spark-submit </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/server/spark/examples/src/main/python/pi.py 10</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_4/7.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(local)/" data-id="clja2gf5u000cdwubf94fgn19" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(stand-alone)/" data-id="clja2jlfl000ckoub901cfk3k" class="article-share-link">
         Share
       </a>
       
