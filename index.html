@@ -72,8 +72,8 @@
 
     
     <div class="article-meta">
-      <a href="/2023/06/23/README/" class="article-date">
-  <time datetime="2023-06-23T07:35:12.417Z" itemprop="datePublished">2023-06-23</time>
+      <a href="/2023/06/24/README/" class="article-date">
+  <time datetime="2023-06-24T14:03:19.557Z" itemprop="datePublished">2023-06-24</time>
 </a>
       
     </div>
@@ -140,7 +140,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/23/README/" data-id="clja2jlfg0007koubdspm9lko" class="article-share-link">
+      <a data-url="http://example.com/2023/06/24/README/" data-id="clja2nfka000798ub13zzfsuh" class="article-share-link">
         Share
       </a>
       
@@ -254,7 +254,95 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Zookeeper/" data-id="clja2jlfn000ekoubbzth073m" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Zookeeper/" data-id="clja2nfke000d98ubgkss5ss7" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Sqoop(1)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Sqoop(1)/">Sqoop(1)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Sqoop(1)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.299Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Sqoop（1）"><a href="#Sqoop（1）" class="headerlink" title="Sqoop（1）"></a>Sqoop（1）</h1><h2 id="Sqoop介绍"><a href="#Sqoop介绍" class="headerlink" title="Sqoop介绍"></a>Sqoop介绍</h2><p>Apache Sqoop是在Hadoop生态体系和RDBMS体系&#96;之间传送数据的一种工具。</p>
+<p>Sqoop工作机制是将导入或导出命令翻译成mapreduce程序来实现。在翻译出的mapreduce中主要是对inputformat和outputformat进行定制。</p>
+<p>站在Apache立场看待数据流转问题，可以分为数据的导入导出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- Import：数据导入。RDBMS---&gt;Hadoop</span><br><span class="line"></span><br><span class="line">- Export：数据导出。Hadoop---&gt;RDBMS</span><br></pre></td></tr></table></figure>
+
+<h2 id="Sqoop安装"><a href="#Sqoop安装" class="headerlink" title="Sqoop安装"></a>Sqoop安装</h2><p>（备注：安装sqoop的前提是已经具备java、mysql、hadoop和hive环境）</p>
+<p><code>cd /export/server</code></p>
+<p>上传压缩包<code>sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz</code></p>
+<p>（1） rz -&gt; 选中<code>sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</code>-&gt; 确定</p>
+<p>（2） 直接拖拽到<code>/export/server</code>路径下</p>
+<p>解压<code>sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>设置软链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar /export/server/sqoop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_4-2/1.png"></p>
+<p>配置环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line">#SQOOP_HOME</span><br><span class="line">export SQOOP_HOME=/export/server/sqoop</span><br><span class="line">export PATH=$PATH:$SQOOP_HOME/bin</span><br></pre></td></tr></table></figure>
+
+<p>重新加载环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>配置文件修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/sqoop/conf</span><br><span class="line"></span><br><span class="line">mv sqoop-env-template.sh sqoop-env.sh</span><br></pre></td></tr></table></figure>
+
+<p>修改sqoop-env.sh</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi sqoop-env.sh</span><br><span class="line"></span><br><span class="line">export HADOOP_COMMON_HOME= /export/server/hadoop</span><br><span class="line">export HADOOP_MAPRED_HOME= /export/server/hadoop</span><br><span class="line">export HIVE_HOME= /export/server/hive</span><br></pre></td></tr></table></figure>
+
+<p>加入mysql的jdbc驱动包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /export/server/hive/lib/mysql-connector-java-5.1.32.jar /export/server/sqoop/lib/</span><br></pre></td></tr></table></figure>
+
+<p>验证启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bin/sqoop list-databases \</span><br><span class="line"></span><br><span class="line"> --connect jdbc:mysql://node1:3306/ \</span><br><span class="line"> </span><br><span class="line"> --username root --password hadoop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image_4-2/2.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Sqoop(1)/" data-id="clja2nfke000e98ubgp5u5tia" class="article-share-link">
         Share
       </a>
       
@@ -586,95 +674,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Sqoop(2)/" data-id="clja2jlfn000dkoub7m9mbvtt" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Sqoop(1)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/19/Sqoop(1)/">Sqoop(1)</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/19/Sqoop(1)/" class="article-date">
-  <time datetime="2023-06-19T01:15:52.299Z" itemprop="datePublished">2023-06-19</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Sqoop（1）"><a href="#Sqoop（1）" class="headerlink" title="Sqoop（1）"></a>Sqoop（1）</h1><h2 id="Sqoop介绍"><a href="#Sqoop介绍" class="headerlink" title="Sqoop介绍"></a>Sqoop介绍</h2><p>Apache Sqoop是在Hadoop生态体系和RDBMS体系&#96;之间传送数据的一种工具。</p>
-<p>Sqoop工作机制是将导入或导出命令翻译成mapreduce程序来实现。在翻译出的mapreduce中主要是对inputformat和outputformat进行定制。</p>
-<p>站在Apache立场看待数据流转问题，可以分为数据的导入导出：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- Import：数据导入。RDBMS---&gt;Hadoop</span><br><span class="line"></span><br><span class="line">- Export：数据导出。Hadoop---&gt;RDBMS</span><br></pre></td></tr></table></figure>
-
-<h2 id="Sqoop安装"><a href="#Sqoop安装" class="headerlink" title="Sqoop安装"></a>Sqoop安装</h2><p>（备注：安装sqoop的前提是已经具备java、mysql、hadoop和hive环境）</p>
-<p><code>cd /export/server</code></p>
-<p>上传压缩包<code>sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz</code></p>
-<p>（1） rz -&gt; 选中<code>sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</code>-&gt; 确定</p>
-<p>（2） 直接拖拽到<code>/export/server</code>路径下</p>
-<p>解压<code>sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar.gz</span><br></pre></td></tr></table></figure>
-
-<p>设置软链接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /export/server/sqoop-1.4.6.bin_hadoop-2.0.4-alpha.tar /export/server/sqoop</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_4-2/1.png"></p>
-<p>配置环境变量</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line">#SQOOP_HOME</span><br><span class="line">export SQOOP_HOME=/export/server/sqoop</span><br><span class="line">export PATH=$PATH:$SQOOP_HOME/bin</span><br></pre></td></tr></table></figure>
-
-<p>重新加载环境变量</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
-
-<p>配置文件修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/sqoop/conf</span><br><span class="line"></span><br><span class="line">mv sqoop-env-template.sh sqoop-env.sh</span><br></pre></td></tr></table></figure>
-
-<p>修改sqoop-env.sh</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi sqoop-env.sh</span><br><span class="line"></span><br><span class="line">export HADOOP_COMMON_HOME= /export/server/hadoop</span><br><span class="line">export HADOOP_MAPRED_HOME= /export/server/hadoop</span><br><span class="line">export HIVE_HOME= /export/server/hive</span><br></pre></td></tr></table></figure>
-
-<p>加入mysql的jdbc驱动包</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /export/server/hive/lib/mysql-connector-java-5.1.32.jar /export/server/sqoop/lib/</span><br></pre></td></tr></table></figure>
-
-<p>验证启动</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bin/sqoop list-databases \</span><br><span class="line"></span><br><span class="line"> --connect jdbc:mysql://node1:3306/ \</span><br><span class="line"> </span><br><span class="line"> --username root --password hadoop</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image_4-2/2.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Sqoop(1)/" data-id="clja2jlfo000fkoub5ige2xp1" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Sqoop(2)/" data-id="clja2nfkf000f98ube7obepid" class="article-share-link">
         Share
       </a>
       
@@ -759,7 +759,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Flume(3)/" data-id="clja2jlff0005koub7x7p7tne" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Flume(3)/" data-id="clja2nfk8000498ube2e18foj" class="article-share-link">
         Share
       </a>
       
@@ -916,88 +916,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Kafka/" data-id="clja2jlfj0009koub17nadfk1" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Flume(2)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/19/Flume(2)/">Flume(2)</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/19/Flume(2)/" class="article-date">
-  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Flume（2）"><a href="#Flume（2）" class="headerlink" title="Flume（2）"></a>Flume（2）</h1><h2 id="配置自定义拦截器"><a href="#配置自定义拦截器" class="headerlink" title="配置自定义拦截器"></a>配置自定义拦截器</h2><p>（1）将自定义拦截器打包成jar包上传到Flume安装目录下lib目录</p>
-<p>（2）在node1和node2上配置上游案例文件在conf目录下创建<code>example9-1-taildir-f-avro-interceptor.conf</code>在node3上配置下游案例文件创建<code>example9-2-avro-f-hdfs-interceptor.conf</code></p>
-<p> <img src="/../image_2-2/1.png"></p>
-<p> <img src="/../image_2-2/2.png"> </p>
-<p>（3）启动下游node3上的flume agent</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-2-avro-f-hdfs-interceptor.</span><br><span class="line">conf -Dflume.root.logger=DEBUG,console</span><br></pre></td></tr></table></figure>
-
-<p> <img src="/../image_2-2/3.png"> </p>
-<p>（4）启动上有的flume agent</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-1-taildir-f-avro-int</span><br><span class="line">erceptor.conf 1&gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-
-<p>（5）去hdfs上查看是否上传成功</p>
-<p><img src="/../image_2-2/4.png"> </p>
-<h2 id="Replicating-Channel-Selector选择器的配置"><a href="#Replicating-Channel-Selector选择器的配置" class="headerlink" title="Replicating Channel Selector选择器的配置"></a>Replicating Channel Selector选择器的配置</h2><p>（1）在node1上配置<code>example10-channel-replicating.conf</code></p>
-<p> <img src="/../image_2-2/5.png"> </p>
-<p>（2）启动</p>
-<p> <img src="/../image_2-2/6.png"> </p>
-<h2 id="Multiplexing-Channel-Selector配置"><a href="#Multiplexing-Channel-Selector配置" class="headerlink" title="Multiplexing Channel Selector配置"></a>Multiplexing Channel Selector配置</h2><p>（1）在myconf中在配置<code>example11-channel-Multiplexing.conf</code></p>
-<p> <img src="/../image_2-2/7.png"> </p>
-<p>（2）启动一下agent</p>
-<p> <img src="/../image_2-2/8.png"> </p>
-<p>这里通过事件的header值来判断将事件发送到哪个channel，还可以配合拦截器一起使用</p>
-<h2 id="Failover-Sink-Processor处理器的配置和使用"><a href="#Failover-Sink-Processor处理器的配置和使用" class="headerlink" title="Failover Sink Processor处理器的配置和使用"></a>Failover Sink Processor处理器的配置和使用</h2><p>（1）在上游node1上配置<code>example12-1-sink-failover.conf</code></p>
-<p> <img src="/../image_2-2/9.png"> </p>
-<p>（2）在node2node3上配置下游文件<code>example12-2-sink-failover.conf</code></p>
-<p> <img src="/../image_2-2/10.png"> </p>
-<p>（1）一组中只有优先级高的那个sink在工作，另一个是等待中</p>
-<p>（2）如果高优先级的sink发送数据失败，则专用低优先级的sink去工作，并且，在配置时间penalty之后，还会尝试用高优先级的去发送数据。</p>
-<p>（3）故障转移处理器维护了一个带有优先级的sink列表，故障转移机制将失败的sink放入到一个冷却池中，如果sink成功发送了事件，将其放入到活跃池中，sink可以设置优先级，数字越高，优先级越高，如果一个sink发送事件失败，下一个有更高优先级的sink将被用来发送事件，比如，优先级100的比优先级80的先被使用，如果没有设置优先级，按配置文件中配置的顺序决定。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Flume(2)/" data-id="clja2jlf10000koubfux7ezti" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Kafka/" data-id="clja2nfk9000698ubg8a370gm" class="article-share-link">
         Share
       </a>
       
@@ -1107,7 +1026,88 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Flume(1)/" data-id="clja2jlfd0003koub1wpb8h80" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Flume(1)/" data-id="clja2nfk0000098ube6uuhuuv" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Flume(2)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Flume(2)/">Flume(2)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(2)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Flume（2）"><a href="#Flume（2）" class="headerlink" title="Flume（2）"></a>Flume（2）</h1><h2 id="配置自定义拦截器"><a href="#配置自定义拦截器" class="headerlink" title="配置自定义拦截器"></a>配置自定义拦截器</h2><p>（1）将自定义拦截器打包成jar包上传到Flume安装目录下lib目录</p>
+<p>（2）在node1和node2上配置上游案例文件在conf目录下创建<code>example9-1-taildir-f-avro-interceptor.conf</code>在node3上配置下游案例文件创建<code>example9-2-avro-f-hdfs-interceptor.conf</code></p>
+<p> <img src="/../image_2-2/1.png"></p>
+<p> <img src="/../image_2-2/2.png"> </p>
+<p>（3）启动下游node3上的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-2-avro-f-hdfs-interceptor.</span><br><span class="line">conf -Dflume.root.logger=DEBUG,console</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/../image_2-2/3.png"> </p>
+<p>（4）启动上有的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-1-taildir-f-avro-int</span><br><span class="line">erceptor.conf 1&gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>（5）去hdfs上查看是否上传成功</p>
+<p><img src="/../image_2-2/4.png"> </p>
+<h2 id="Replicating-Channel-Selector选择器的配置"><a href="#Replicating-Channel-Selector选择器的配置" class="headerlink" title="Replicating Channel Selector选择器的配置"></a>Replicating Channel Selector选择器的配置</h2><p>（1）在node1上配置<code>example10-channel-replicating.conf</code></p>
+<p> <img src="/../image_2-2/5.png"> </p>
+<p>（2）启动</p>
+<p> <img src="/../image_2-2/6.png"> </p>
+<h2 id="Multiplexing-Channel-Selector配置"><a href="#Multiplexing-Channel-Selector配置" class="headerlink" title="Multiplexing Channel Selector配置"></a>Multiplexing Channel Selector配置</h2><p>（1）在myconf中在配置<code>example11-channel-Multiplexing.conf</code></p>
+<p> <img src="/../image_2-2/7.png"> </p>
+<p>（2）启动一下agent</p>
+<p> <img src="/../image_2-2/8.png"> </p>
+<p>这里通过事件的header值来判断将事件发送到哪个channel，还可以配合拦截器一起使用</p>
+<h2 id="Failover-Sink-Processor处理器的配置和使用"><a href="#Failover-Sink-Processor处理器的配置和使用" class="headerlink" title="Failover Sink Processor处理器的配置和使用"></a>Failover Sink Processor处理器的配置和使用</h2><p>（1）在上游node1上配置<code>example12-1-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/9.png"> </p>
+<p>（2）在node2node3上配置下游文件<code>example12-2-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/10.png"> </p>
+<p>（1）一组中只有优先级高的那个sink在工作，另一个是等待中</p>
+<p>（2）如果高优先级的sink发送数据失败，则专用低优先级的sink去工作，并且，在配置时间penalty之后，还会尝试用高优先级的去发送数据。</p>
+<p>（3）故障转移处理器维护了一个带有优先级的sink列表，故障转移机制将失败的sink放入到一个冷却池中，如果sink成功发送了事件，将其放入到活跃池中，sink可以设置优先级，数字越高，优先级越高，如果一个sink发送事件失败，下一个有更高优先级的sink将被用来发送事件，比如，优先级100的比优先级80的先被使用，如果没有设置优先级，按配置文件中配置的顺序决定。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(2)/" data-id="clja2nfk7000298ub0zdd6yy4" class="article-share-link">
         Share
       </a>
       
@@ -1171,7 +1171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clja2jlfk000akoubh0hagka2" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clja2nfkb000998ubfw4eb5te" class="article-share-link">
         Share
       </a>
       
@@ -1353,7 +1353,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clja2jlf90001koub0awx0nk1" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clja2nfk6000198ubgrk4c7sx" class="article-share-link">
         Share
       </a>
       
