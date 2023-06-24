@@ -64,6 +64,96 @@
     <h1 class="page-type-title"></h1>
     
     
+    <article id="post-README" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/23/README/" class="article-date">
+  <time datetime="2023-06-23T07:35:12.417Z" itemprop="datePublished">2023-06-23</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <p>#SpringBoot整合kafka</p>
+<p>Kafka是目前主流的流处理平台，同时作为消息队列家族的一员，其高吞吐性作为很多场景下的主流选择。同时作为流处理平台，在大数据开发中，作为黏合剂串联各个系统。</p>
+<p>###Kafka流处理平台特性：</p>
+<p>可以发布或订阅数据流处理系统，类似于消息队列<br>数据流存储的平台，并且具备错误容忍<br>当数据产生时就对数据进行处理。</p>
+<p>两类应用：<br>构建实时数据流管道<br>构建实时数据处理应用，转换或响应数据流 kafka是一个面向于数据流的生产、转换、存储、消费整体的流处理平台。<br>###Kafka基本概念<br>• Producer:消息和数据的生产者，向Kafka的一个topic发布消息的进程&#x2F;代码&#x2F;服务</p>
+<p>• Consumer:消息和数据的消费者，订阅数据（Topic）并且处理其发布的消息的进程&#x2F;代码&#x2F;服务</p>
+<p>• Consumer Group:逻辑概念，对于同一个topic，会广播给不同的group，一个group中，只有一个consumer可以消费该消息</p>
+<p>• Broker:物理概念，Kafka集群中的每个Kafka节点</p>
+<p>• Topic:逻辑概念，Kafka消息的类别，对数据进行区分、隔离</p>
+<p>• Partition：物理概念，Kafka下数据存储的基本单元。一个Topic数据，会被分散存储到多个Partition，每一个Partition是有序的</p>
+<p>• Replication（副本、备份）:同一个Partition可能会有多个Replica，多个Replica之间数据是一样的</p>
+<p>• Replication (复制) Leader:一个Partitionn的多个Replica上，需要一个Leader负责该Partition上与Producer和Consumer交互</p>
+<p>• ReplicaManager:负责管理当前broker所有分区和副本的信息，处理KafkaController发起的一些请求，副本状态的切换、添加&#x2F;读取消息、Leader的选举等</p>
+<p>###kafka组成：<br>broker 节点；</p>
+<p>topic 数据分类；</p>
+<p>partition (分区) 分区；</p>
+<p>replication (复制) 副本；</p>
+<h4 id="Partition-分区"><a href="#Partition-分区" class="headerlink" title="Partition (分区)"></a>Partition (分区)</h4><p>• 每一个Topic被切分为多个Partitions(Partition属于消费者存储的基本单位) </p>
+<p>• 消费者数目小于或等于Partition的数目（多个消费者若消费同个Partition会出现数据错误，所有Kafka如此设计） </p>
+<p>• Broker Group中的每一个Broker保存Topic的一个或多个Partitions(一个Broker只会保存一个Partition,若Partition太大则多个Broker保存同个Partition) </p>
+<p>• Consumer Group中的仅有一个Consumer读取Topic的一个或多个Partitions，并且是唯一的Consumer(避免同一个Partition被多个Consumer消费)</p>
+<h4 id="Replication-复制"><a href="#Replication-复制" class="headerlink" title="Replication (复制)"></a>Replication (复制)</h4><p>• 当集群中有Broker挂掉的情况，系统可以主动地使Replicas提供服务 </p>
+<p>• 系统默认设置每一个Topic的replication系数为1（即默认没有副本，节省资源），可以在创建Topic时单独设置 </p>
+<p>特点：</p>
+<ol>
+<li>Replication的基本单位是Topic的Partition; </li>
+<li>所有的读和写都从Leader进，Followers只是做为备份（只有Leader管理读写，其他的Replication只做备份） </li>
+<li>Follower必须能够及时复制Leader的数据 </li>
+<li>增加容错性与可拓展性</li>
+</ol>
+<p>####kafka消息结构：<br>Offset: 消息的偏移量； </p>
+<p>Length: 消息的长度； </p>
+<p>CRC32 : 消息校验字段，校验信息的完整性； </p>
+<p>Magic: 用于判断该消息是不是kafka消息； </p>
+<p>attributes: 可选字段，存放当前消息的属性； </p>
+<p>Timestamp: 消费时间戳； </p>
+<p>Key Length: key的长度； </p>
+<p>Key : key的值； </p>
+<p>Value Length: 值的长度； Value: 消息内容；</p>
+<p>####kafka应用场景 </p>
+<ol>
+<li>消息队列 </li>
+<li>行为跟踪 </li>
+<li>元信息监控 </li>
+<li>日志收集 </li>
+<li>流处理 </li>
+<li>事件源 </li>
+<li>持久性日志（commit log）</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/23/README/" data-id="clja2gf5q0007dwubgtwf7hvr" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
     <article id="post-Zookeeper" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -164,7 +254,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Zookeeper/" data-id="clj264d8a000eboub71uhdkfb" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Zookeeper/" data-id="clja2gf5w000edwub7tky4zvj" class="article-share-link">
         Share
       </a>
       
@@ -252,7 +342,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Sqoop(1)/" data-id="clj264d89000bboub8ivthxol" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Sqoop(1)/" data-id="clja2gf5v000ddwubh5x91y2r" class="article-share-link">
         Share
       </a>
       
@@ -584,7 +674,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Sqoop(2)/" data-id="clj264d8a000dboub8o734sxg" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Sqoop(2)/" data-id="clja2gf5w000fdwubgto29ch6" class="article-share-link">
         Share
       </a>
       
@@ -669,7 +759,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Flume(3)/" data-id="clj264d850004boubagrj0m57" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Flume(3)/" data-id="clja2gf5o0004dwub7n0edgjc" class="article-share-link">
         Share
       </a>
       
@@ -826,88 +916,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Kafka/" data-id="clj264d860006boub6vo9d65m" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Flume(2)" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/19/Flume(2)/">Flume(2)</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/19/Flume(2)/" class="article-date">
-  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Flume（2）"><a href="#Flume（2）" class="headerlink" title="Flume（2）"></a>Flume（2）</h1><h2 id="配置自定义拦截器"><a href="#配置自定义拦截器" class="headerlink" title="配置自定义拦截器"></a>配置自定义拦截器</h2><p>（1）将自定义拦截器打包成jar包上传到Flume安装目录下lib目录</p>
-<p>（2）在node1和node2上配置上游案例文件在conf目录下创建<code>example9-1-taildir-f-avro-interceptor.conf</code>在node3上配置下游案例文件创建<code>example9-2-avro-f-hdfs-interceptor.conf</code></p>
-<p> <img src="/../image_2-2/1.png"></p>
-<p> <img src="/../image_2-2/2.png"> </p>
-<p>（3）启动下游node3上的flume agent</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-2-avro-f-hdfs-interceptor.</span><br><span class="line">conf -Dflume.root.logger=DEBUG,console</span><br></pre></td></tr></table></figure>
-
-<p> <img src="/../image_2-2/3.png"> </p>
-<p>（4）启动上有的flume agent</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-1-taildir-f-avro-int</span><br><span class="line">erceptor.conf 1&gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-
-<p>（5）去hdfs上查看是否上传成功</p>
-<p><img src="/../image_2-2/4.png"> </p>
-<h2 id="Replicating-Channel-Selector选择器的配置"><a href="#Replicating-Channel-Selector选择器的配置" class="headerlink" title="Replicating Channel Selector选择器的配置"></a>Replicating Channel Selector选择器的配置</h2><p>（1）在node1上配置<code>example10-channel-replicating.conf</code></p>
-<p> <img src="/../image_2-2/5.png"> </p>
-<p>（2）启动</p>
-<p> <img src="/../image_2-2/6.png"> </p>
-<h2 id="Multiplexing-Channel-Selector配置"><a href="#Multiplexing-Channel-Selector配置" class="headerlink" title="Multiplexing Channel Selector配置"></a>Multiplexing Channel Selector配置</h2><p>（1）在myconf中在配置<code>example11-channel-Multiplexing.conf</code></p>
-<p> <img src="/../image_2-2/7.png"> </p>
-<p>（2）启动一下agent</p>
-<p> <img src="/../image_2-2/8.png"> </p>
-<p>这里通过事件的header值来判断将事件发送到哪个channel，还可以配合拦截器一起使用</p>
-<h2 id="Failover-Sink-Processor处理器的配置和使用"><a href="#Failover-Sink-Processor处理器的配置和使用" class="headerlink" title="Failover Sink Processor处理器的配置和使用"></a>Failover Sink Processor处理器的配置和使用</h2><p>（1）在上游node1上配置<code>example12-1-sink-failover.conf</code></p>
-<p> <img src="/../image_2-2/9.png"> </p>
-<p>（2）在node2node3上配置下游文件<code>example12-2-sink-failover.conf</code></p>
-<p> <img src="/../image_2-2/10.png"> </p>
-<p>（1）一组中只有优先级高的那个sink在工作，另一个是等待中</p>
-<p>（2）如果高优先级的sink发送数据失败，则专用低优先级的sink去工作，并且，在配置时间penalty之后，还会尝试用高优先级的去发送数据。</p>
-<p>（3）故障转移处理器维护了一个带有优先级的sink列表，故障转移机制将失败的sink放入到一个冷却池中，如果sink成功发送了事件，将其放入到活跃池中，sink可以设置优先级，数字越高，优先级越高，如果一个sink发送事件失败，下一个有更高优先级的sink将被用来发送事件，比如，优先级100的比优先级80的先被使用，如果没有设置优先级，按配置文件中配置的顺序决定。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Flume(2)/" data-id="clj264d830001boubf8gd9hh1" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Kafka/" data-id="clja2gf5p0006dwub1c63csoe" class="article-share-link">
         Share
       </a>
       
@@ -1017,7 +1026,88 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/19/Flume(1)/" data-id="clj264d840002boub5qhsdhc1" class="article-share-link">
+      <a data-url="http://example.com/2023/06/19/Flume(1)/" data-id="clja2gf5j0001dwub0dc4a2u1" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+    <article id="post-Flume(2)" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2023/06/19/Flume(2)/">Flume(2)</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/19/Flume(2)/" class="article-date">
+  <time datetime="2023-06-19T01:15:52.297Z" itemprop="datePublished">2023-06-19</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <h1 id="Flume（2）"><a href="#Flume（2）" class="headerlink" title="Flume（2）"></a>Flume（2）</h1><h2 id="配置自定义拦截器"><a href="#配置自定义拦截器" class="headerlink" title="配置自定义拦截器"></a>配置自定义拦截器</h2><p>（1）将自定义拦截器打包成jar包上传到Flume安装目录下lib目录</p>
+<p>（2）在node1和node2上配置上游案例文件在conf目录下创建<code>example9-1-taildir-f-avro-interceptor.conf</code>在node3上配置下游案例文件创建<code>example9-2-avro-f-hdfs-interceptor.conf</code></p>
+<p> <img src="/../image_2-2/1.png"></p>
+<p> <img src="/../image_2-2/2.png"> </p>
+<p>（3）启动下游node3上的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-2-avro-f-hdfs-interceptor.</span><br><span class="line">conf -Dflume.root.logger=DEBUG,console</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/../image_2-2/3.png"> </p>
+<p>（4）启动上有的flume agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup bin/flume-ng agent -n a1 -c conf/ -f myconf/example9-1-taildir-f-avro-int</span><br><span class="line">erceptor.conf 1&gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>（5）去hdfs上查看是否上传成功</p>
+<p><img src="/../image_2-2/4.png"> </p>
+<h2 id="Replicating-Channel-Selector选择器的配置"><a href="#Replicating-Channel-Selector选择器的配置" class="headerlink" title="Replicating Channel Selector选择器的配置"></a>Replicating Channel Selector选择器的配置</h2><p>（1）在node1上配置<code>example10-channel-replicating.conf</code></p>
+<p> <img src="/../image_2-2/5.png"> </p>
+<p>（2）启动</p>
+<p> <img src="/../image_2-2/6.png"> </p>
+<h2 id="Multiplexing-Channel-Selector配置"><a href="#Multiplexing-Channel-Selector配置" class="headerlink" title="Multiplexing Channel Selector配置"></a>Multiplexing Channel Selector配置</h2><p>（1）在myconf中在配置<code>example11-channel-Multiplexing.conf</code></p>
+<p> <img src="/../image_2-2/7.png"> </p>
+<p>（2）启动一下agent</p>
+<p> <img src="/../image_2-2/8.png"> </p>
+<p>这里通过事件的header值来判断将事件发送到哪个channel，还可以配合拦截器一起使用</p>
+<h2 id="Failover-Sink-Processor处理器的配置和使用"><a href="#Failover-Sink-Processor处理器的配置和使用" class="headerlink" title="Failover Sink Processor处理器的配置和使用"></a>Failover Sink Processor处理器的配置和使用</h2><p>（1）在上游node1上配置<code>example12-1-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/9.png"> </p>
+<p>（2）在node2node3上配置下游文件<code>example12-2-sink-failover.conf</code></p>
+<p> <img src="/../image_2-2/10.png"> </p>
+<p>（1）一组中只有优先级高的那个sink在工作，另一个是等待中</p>
+<p>（2）如果高优先级的sink发送数据失败，则专用低优先级的sink去工作，并且，在配置时间penalty之后，还会尝试用高优先级的去发送数据。</p>
+<p>（3）故障转移处理器维护了一个带有优先级的sink列表，故障转移机制将失败的sink放入到一个冷却池中，如果sink成功发送了事件，将其放入到活跃池中，sink可以设置优先级，数字越高，优先级越高，如果一个sink发送事件失败，下一个有更高优先级的sink将被用来发送事件，比如，优先级100的比优先级80的先被使用，如果没有设置优先级，按配置文件中配置的顺序决定。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/19/Flume(2)/" data-id="clja2gf5m0002dwubhc9f3fwg" class="article-share-link">
         Share
       </a>
       
@@ -1081,7 +1171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clj264d8a000cbouba9xge2aa" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Spark(Yarn)/" data-id="clja2gf5s000adwub25d3g57i" class="article-share-link">
         Share
       </a>
       
@@ -1263,105 +1353,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clj264d7y0000boubezpbdgbh" class="article-share-link">
-        Share
-      </a>
-      
-    </footer>
-
-  </div>
-
-  
-
-  
-
-</article>
-    
-    <article id="post-Git" class="article article-type-post" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-      
-  
-  <h2 class="article-title" itemprop="name">
-    <a href="/2023/06/09/Git/">GIT流程配置</a>
-  </h2>
-  
-  
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2023/06/09/Git/" class="article-date">
-  <time datetime="2023-06-09T03:08:47.746Z" itemprop="datePublished">2023-06-09</time>
-</a>
-      
-    </div>
-    
-
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        
-      
-      
-        <h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="Git-的基本使用01-TortoiseGit-操作本地仓库"><a href="#Git-的基本使用01-TortoiseGit-操作本地仓库" class="headerlink" title="Git 的基本使用01-TortoiseGit 操作本地仓库"></a>Git 的基本使用01-TortoiseGit 操作本地仓库</h2><p>1.初始化仓库</p>
-<p>​        创建Git版本库创建完毕仓库,我们发现,此时我们创建的文件夹下有一个.git 文件已经生成了，并且仓库文件夹上多了一个 绿色图标。</p>
-<p>2.添加文件</p>
-<p>​        在仓库中新建一个文件，选中新建的文件–&gt;右键–&gt; TortoiseGit–&gt; 添加，此时我们看到文件夹上多了一个 “加号”。</p>
-<p>3.提交文件至本地文件</p>
-<p>选中文件，右键git提交<img src="/../image_2/1.png"></p>
-<p>4.修改文件，与再次提交文件</p>
-<p>​        当我们修改文件以后,文件上多了一个红色感叹号,表示我们上次提交后该文件被修改过提交后文件图标又变成绿色<img src="/../image_2/2.png"></p>
-<p>5.文件状态讲解</p>
-<p>6.修改文件，不提交和上一个版本比较差异</p>
-<p>修改文件,此时不要提交选中文件–&gt;右键–&gt; TortoiseGit–&gt; 比较差异</p>
-<p><img src="/../image_2/3.png"></p>
-<p>7.查看提交历史记录</p>
-<p>选中文件右键–&gt; TortoiseGit–&gt; 显示日志，此时我们可以看到所有的历史提交记录<img src="/../image_2/4.png"></p>
-<p>8.回退至历史版本</p>
-<p>右键–&gt; TortoiseGit–&gt; 显示日志，选中某个版本–&gt; 进行如下操作<img src="/../image_2/5.png"></p>
-<p>9.文件删除</p>
-<p>本地删除与恢复<img src="/../image_2/6.png"></p>
-<h2 id="Git-的基本使用02-TortoiseGit-操作本地仓库-分支"><a href="#Git-的基本使用02-TortoiseGit-操作本地仓库-分支" class="headerlink" title="Git 的基本使用02-TortoiseGit 操作本地仓库(分支)"></a>Git 的基本使用02-TortoiseGit 操作本地仓库(分支)</h2><p>1.创建分支</p>
-<p>到现在为止,我们一直使用的时主分支(master)在主分支上操作创建分支<img src="/../image_2/7.png"></p>
-<p>2.查看分支</p>
-<p>查看版本分支图,此时我们看到有两个分支<img src="/../image_2/8.png"></p>
-<p>3.切换分支</p>
-<p><img src="/../image_2/9.png"></p>
-<p>4.合并</p>
-<p>切换到 主版本，右键 合并即可将需求1 写的代码合并至主分支</p>
-<p><img src="/../image_2/10.png"></p>
-<p>5.删除分支</p>
-<p><img src="/../image_2/11.png"></p>
-<h2 id="tag标签"><a href="#tag标签" class="headerlink" title="tag标签"></a>tag标签</h2><p>1.标签的创建</p>
-<p><img src="/../image_2/12.png"></p>
-<p>2.标签的切换与删除</p>
-<p><img src="/../image_2/13.png"></p>
-<h2 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h2><p>1.创建远程仓库</p>
-<p><img src="/../image_2/14.png"></p>
-<p>  <img src="/../image_2/15.png"></p>
-<p>2.把本地代码推送到云端</p>
-<p><img src="/../image_2/16.png"></p>
-<p>3.从远程仓库克隆代码</p>
-<p><img src="/../image_2/17.png"></p>
-<p>4.连接成功</p>
-<p><img src="/../image_2/18.png"></p>
-<p>5.推送本地仓库内容至远程仓库</p>
-<p><img src="/../image_2/19.png"></p>
-<p>6.克隆远程仓库到本地</p>
-<p><img src="/../image_2/20.png"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/06/09/Git/" data-id="clj264d850003boub9xuacrah" class="article-share-link">
+      <a data-url="http://example.com/2023/06/09/Docker/" data-id="clja2gf5d0000dwubabx22cp4" class="article-share-link">
         Share
       </a>
       

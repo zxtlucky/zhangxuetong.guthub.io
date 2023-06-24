@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="content">
+    <section class="outer">
+  <article id="post-README" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+
+    
+    <div class="article-meta">
+      <a href="/2023/06/23/README/" class="article-date">
+  <time datetime="2023-06-23T07:35:12.417Z" itemprop="datePublished">2023-06-23</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+      
+        <p>#SpringBoot整合kafka</p>
+<p>Kafka是目前主流的流处理平台，同时作为消息队列家族的一员，其高吞吐性作为很多场景下的主流选择。同时作为流处理平台，在大数据开发中，作为黏合剂串联各个系统。</p>
+<p>###Kafka流处理平台特性：</p>
+<p>可以发布或订阅数据流处理系统，类似于消息队列<br>数据流存储的平台，并且具备错误容忍<br>当数据产生时就对数据进行处理。</p>
+<p>两类应用：<br>构建实时数据流管道<br>构建实时数据处理应用，转换或响应数据流 kafka是一个面向于数据流的生产、转换、存储、消费整体的流处理平台。<br>###Kafka基本概念<br>• Producer:消息和数据的生产者，向Kafka的一个topic发布消息的进程&#x2F;代码&#x2F;服务</p>
+<p>• Consumer:消息和数据的消费者，订阅数据（Topic）并且处理其发布的消息的进程&#x2F;代码&#x2F;服务</p>
+<p>• Consumer Group:逻辑概念，对于同一个topic，会广播给不同的group，一个group中，只有一个consumer可以消费该消息</p>
+<p>• Broker:物理概念，Kafka集群中的每个Kafka节点</p>
+<p>• Topic:逻辑概念，Kafka消息的类别，对数据进行区分、隔离</p>
+<p>• Partition：物理概念，Kafka下数据存储的基本单元。一个Topic数据，会被分散存储到多个Partition，每一个Partition是有序的</p>
+<p>• Replication（副本、备份）:同一个Partition可能会有多个Replica，多个Replica之间数据是一样的</p>
+<p>• Replication (复制) Leader:一个Partitionn的多个Replica上，需要一个Leader负责该Partition上与Producer和Consumer交互</p>
+<p>• ReplicaManager:负责管理当前broker所有分区和副本的信息，处理KafkaController发起的一些请求，副本状态的切换、添加&#x2F;读取消息、Leader的选举等</p>
+<p>###kafka组成：<br>broker 节点；</p>
+<p>topic 数据分类；</p>
+<p>partition (分区) 分区；</p>
+<p>replication (复制) 副本；</p>
+<h4 id="Partition-分区"><a href="#Partition-分区" class="headerlink" title="Partition (分区)"></a>Partition (分区)</h4><p>• 每一个Topic被切分为多个Partitions(Partition属于消费者存储的基本单位) </p>
+<p>• 消费者数目小于或等于Partition的数目（多个消费者若消费同个Partition会出现数据错误，所有Kafka如此设计） </p>
+<p>• Broker Group中的每一个Broker保存Topic的一个或多个Partitions(一个Broker只会保存一个Partition,若Partition太大则多个Broker保存同个Partition) </p>
+<p>• Consumer Group中的仅有一个Consumer读取Topic的一个或多个Partitions，并且是唯一的Consumer(避免同一个Partition被多个Consumer消费)</p>
+<h4 id="Replication-复制"><a href="#Replication-复制" class="headerlink" title="Replication (复制)"></a>Replication (复制)</h4><p>• 当集群中有Broker挂掉的情况，系统可以主动地使Replicas提供服务 </p>
+<p>• 系统默认设置每一个Topic的replication系数为1（即默认没有副本，节省资源），可以在创建Topic时单独设置 </p>
+<p>特点：</p>
+<ol>
+<li>Replication的基本单位是Topic的Partition; </li>
+<li>所有的读和写都从Leader进，Followers只是做为备份（只有Leader管理读写，其他的Replication只做备份） </li>
+<li>Follower必须能够及时复制Leader的数据 </li>
+<li>增加容错性与可拓展性</li>
+</ol>
+<p>####kafka消息结构：<br>Offset: 消息的偏移量； </p>
+<p>Length: 消息的长度； </p>
+<p>CRC32 : 消息校验字段，校验信息的完整性； </p>
+<p>Magic: 用于判断该消息是不是kafka消息； </p>
+<p>attributes: 可选字段，存放当前消息的属性； </p>
+<p>Timestamp: 消费时间戳； </p>
+<p>Key Length: key的长度； </p>
+<p>Key : key的值； </p>
+<p>Value Length: 值的长度； Value: 消息内容；</p>
+<p>####kafka应用场景 </p>
+<ol>
+<li>消息队列 </li>
+<li>行为跟踪 </li>
+<li>元信息监控 </li>
+<li>日志收集 </li>
+<li>流处理 </li>
+<li>事件源 </li>
+<li>持久性日志（commit log）</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/23/README/" data-id="clja2gf5q0007dwubgtwf7hvr" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+<nav class="article-nav">
+  
+  
+  <a href="/2023/06/19/Zookeeper/" class="article-nav-link">
+    <strong class="article-nav-caption">Older</strong>
+    <div class="article-nav-title">Zookeeper</div>
+  </a>
+  
+</nav>
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2023</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+  <li><i class="fe fe-bookmark tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul></p>
+  </div>
+</footer>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+  });
+</script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+
+</html>
